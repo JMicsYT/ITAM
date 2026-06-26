@@ -10,90 +10,50 @@ import { consumablesApi } from '../../api/consumables';
 import { tokensApi } from '../../api/tokens';
 import type { NavSection } from '../../types';
 
-// ============================================================
-// Dashboard — Cyberpunk HUD-style overview
-// ============================================================
-
 interface StatCardProps {
   icon: React.ReactNode;
   label: string;
   value: string | number;
   sub?: string;
-  neonColor: string;
   glowClass?: string;
+  iconBgClass?: string;
+  iconTextClass?: string;
   onClick?: () => void;
   urgent?: boolean;
   index?: number;
 }
 
-function StatCard({ icon, label, value, sub, neonColor, glowClass, onClick, urgent, index = 0 }: StatCardProps) {
+function StatCard({ icon, label, value, sub, glowClass, iconBgClass, iconTextClass, onClick, urgent }: StatCardProps) {
   return (
     <button
       onClick={onClick}
-      className={clsx('card-stat text-left w-full group', glowClass, urgent && 'glow-urgent')}
-      style={{ animationDelay: `${index * 80}ms` }}
+      className={clsx('card-stat text-left w-full p-5', glowClass, urgent && 'border-l-4 border-red-500')}
     >
-      {/* Top accent bar */}
-      <div
-        className="h-[2px] w-full mb-0"
-        style={{
-          background: `linear-gradient(90deg, ${neonColor}, transparent)`,
-          opacity: 0.7,
-        }}
-      />
-
-      <div className="p-5">
-        {/* Icon + urgent indicator */}
-        <div className="flex items-start justify-between gap-2 mb-4">
-          <div
-            className="w-10 h-10 flex items-center justify-center shrink-0"
-            style={{
-              border: `1px solid ${neonColor}44`,
-              background: `${neonColor}0d`,
-              clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%)',
-              boxShadow: `0 0 12px ${neonColor}22`,
-            }}
-          >
-            <span style={{ color: neonColor, filter: `drop-shadow(0 0 4px ${neonColor}88)` }}>
-              {icon}
-            </span>
-          </div>
-
-          {urgent && (
-            <div className="flex items-center gap-1.5 shrink-0">
-              <AlertTriangle className="w-3.5 h-3.5 text-[#ff2255] animate-pulse" style={{ filter: 'drop-shadow(0 0 4px #ff2255)' }} />
-              <span className="text-[9px] uppercase tracking-widest text-[#ff2255] font-mono">Alert</span>
-            </div>
-          )}
+      <div className="flex items-start justify-between gap-2 mb-4">
+        <div className={clsx("w-12 h-12 flex items-center justify-center rounded-xl", iconBgClass, iconTextClass)}>
+          {icon}
         </div>
-
-        {/* Value */}
-        <div
-          className="text-4xl font-black tabular-nums mb-1"
-          style={{
-            fontFamily: 'Orbitron, monospace',
-            color: neonColor,
-            textShadow: `0 0 20px ${neonColor}66, 0 0 40px ${neonColor}33`,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          {value}
-        </div>
-
-        {/* Label */}
-        <div
-          className="text-[11px] font-semibold uppercase tracking-[0.08em] mb-1"
-          style={{ color: '#8888aa', fontFamily: 'JetBrains Mono, monospace' }}
-        >
-          {label}
-        </div>
-
-        {sub && (
-          <div className="text-[9px] uppercase tracking-widest" style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}>
-            {sub}
+        {urgent && (
+          <div className="flex items-center gap-1.5 shrink-0 bg-red-50 px-2 py-1 rounded-md text-red-600">
+            <AlertTriangle className="w-3.5 h-3.5" />
+            <span className="text-[10px] font-bold uppercase tracking-wider">Alert</span>
           </div>
         )}
       </div>
+
+      <div className="text-3xl font-display font-bold text-slate-800 mb-1">
+        {value}
+      </div>
+
+      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+        {label}
+      </div>
+
+      {sub && (
+        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+          {sub}
+        </div>
+      )}
     </button>
   );
 }
@@ -101,9 +61,8 @@ function StatCard({ icon, label, value, sub, neonColor, glowClass, onClick, urge
 function SkeletonCard() {
   return (
     <div className="card-stat p-5">
-      <div className="skeleton w-full h-[2px] -mt-5 mb-5" />
-      <div className="skeleton w-10 h-10 mb-4" />
-      <div className="skeleton h-10 w-20 rounded mb-2" />
+      <div className="skeleton w-12 h-12 rounded-xl mb-4" />
+      <div className="skeleton h-8 w-20 rounded mb-2" />
       <div className="skeleton h-3 w-32 rounded" />
     </div>
   );
@@ -153,7 +112,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   if (loading) {
     return (
-      <div className="p-4 md:p-8 max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="mb-8 space-y-2">
           <div className="skeleton h-7 w-64 rounded" />
           <div className="skeleton h-4 w-48 rounded" />
@@ -171,183 +130,126 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const expiredTokens = tokenStats?.byStatus?.expired ?? 0;
 
   const equipTypes = [
-    { key: 'pc',      label: 'ПК',        color: '#00f5ff' },
-    { key: 'laptop',  label: 'Ноутбуки',  color: '#00ff88' },
-    { key: 'printer', label: 'Принтеры',  color: '#ffaa00' },
-    { key: 'server',  label: 'Серверы',   color: '#ff2255' },
-    { key: 'ups',     label: 'ИБП',       color: '#b400ff' },
-    { key: 'monitor', label: 'Мониторы',  color: '#0080ff' },
+    { key: 'pc',      label: 'ПК',        colorClass: 'bg-blue-500' },
+    { key: 'laptop',  label: 'Ноутбуки',  colorClass: 'bg-emerald-500' },
+    { key: 'printer', label: 'Принтеры',  colorClass: 'bg-amber-500' },
+    { key: 'server',  label: 'Серверы',   colorClass: 'bg-red-500' },
+    { key: 'ups',     label: 'ИБП',       colorClass: 'bg-purple-500' },
+    { key: 'monitor', label: 'Мониторы',  colorClass: 'bg-sky-500' },
   ];
 
   const tokenList = [
-    { key: 'active',  label: 'Активных',   color: '#00ff88', count: activeTokens },
-    { key: 'in_safe', label: 'В сейфе',    color: '#00f5ff', count: tokenStats?.byStatus?.in_safe ?? 0 },
-    { key: 'expired', label: 'Истёкших',   color: '#555577', count: expiredTokens },
-    { key: 'revoked', label: 'Отозванных', color: '#ff2255', count: tokenStats?.byStatus?.revoked ?? 0 },
+    { key: 'active',  label: 'Активных',   colorClass: 'bg-emerald-500', count: activeTokens },
+    { key: 'in_safe', label: 'В сейфе',    colorClass: 'bg-sky-500', count: tokenStats?.byStatus?.in_safe ?? 0 },
+    { key: 'expired', label: 'Истёкших',   colorClass: 'bg-slate-500', count: expiredTokens },
+    { key: 'revoked', label: 'Отозванных', colorClass: 'bg-red-500', count: tokenStats?.byStatus?.revoked ?? 0 },
   ];
 
   const statusItems = [
-    { key: 'in_use',         label: 'В эксплуатации', color: '#00ff88' },
-    { key: 'storage',        label: 'На складе',       color: '#00f5ff' },
-    { key: 'repair',         label: 'В ремонте',       color: '#ffaa00' },
-    { key: 'decommissioned', label: 'Списано',         color: '#555577' },
+    { key: 'in_use',         label: 'В эксплуатации', colorClass: 'bg-emerald-50', textClass: 'text-emerald-700' },
+    { key: 'storage',        label: 'На складе',       colorClass: 'bg-sky-50', textClass: 'text-sky-700' },
+    { key: 'repair',         label: 'В ремонте',       colorClass: 'bg-amber-50', textClass: 'text-amber-700' },
+    { key: 'decommissioned', label: 'Списано',         colorClass: 'bg-slate-100', textClass: 'text-slate-700' },
   ];
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto" style={{ animation: 'var(--animate-fade-in)' }}>
+    <div className="max-w-7xl mx-auto animate-fade-in">
 
       {/* ── Page header ── */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
-          <Cpu
-            className="w-5 h-5"
-            style={{ color: '#00f5ff', filter: 'drop-shadow(0 0 6px #00f5ff)' }}
-          />
-          <h1
-            className="text-xl md:text-2xl font-black uppercase tracking-widest"
-            style={{
-              fontFamily: 'Orbitron, monospace',
-              color: '#e8eaff',
-            }}
-          >
-            ITAM <span style={{ color: '#00f5ff', textShadow: '0 0 12px #00f5ff88' }}>Control</span>
+          <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+            <Cpu className="w-5 h-5" />
+          </div>
+          <h1 className="text-2xl font-display font-bold text-slate-800">
+            Обзор системы
           </h1>
         </div>
-        <p
-          className="text-xs uppercase tracking-[0.15em]"
-          style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}
-        >
-          // Обзор состояния ИТ-инфраструктуры
+        <p className="text-sm text-slate-500 font-medium ml-12">
+          Состояние инфраструктуры и оборудования
         </p>
       </div>
 
       {/* Error banner */}
       {error && (
-        <div
-          className="mb-6 p-4 flex items-center gap-3 text-sm"
-          style={{
-            background: 'rgba(255,34,85,0.08)',
-            border: '1px solid rgba(255,34,85,0.4)',
-            color: '#ff2255',
-            fontFamily: 'JetBrains Mono, monospace',
-          }}
-        >
-          <AlertTriangle className="w-4 h-4 shrink-0" />
+        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 flex items-center gap-3 text-sm font-medium">
+          <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* ── Primary stat cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
-          index={0}
-          icon={<Server className="w-5 h-5" />}
+          icon={<Server className="w-6 h-6" />}
           label="Оборудование"
           value={totalEquipment}
           sub="Всех типов"
-          neonColor="#00f5ff"
-          glowClass="glow-cyan"
+          glowClass="border-l-4 border-blue-500"
+          iconBgClass="bg-blue-50"
+          iconTextClass="text-blue-600"
           onClick={() => onNavigate('equipment')}
         />
         <StatCard
-          index={1}
-          icon={<Activity className="w-5 h-5" />}
+          icon={<Activity className="w-6 h-6" />}
           label="В ремонте"
           value={inRepair}
           sub="Требует внимания"
-          neonColor="#ff2255"
-          glowClass={inRepair > 0 ? 'glow-red' : ''}
+          glowClass={inRepair > 0 ? "border-l-4 border-red-500" : "border-l-4 border-slate-300"}
+          iconBgClass={inRepair > 0 ? "bg-red-50" : "bg-slate-100"}
+          iconTextClass={inRepair > 0 ? "text-red-600" : "text-slate-500"}
           urgent={inRepair > 0}
           onClick={() => onNavigate('equipment')}
         />
         <StatCard
-          index={2}
-          icon={<Package className="w-5 h-5" />}
+          icon={<Package className="w-6 h-6" />}
           label="Расходники"
           value={consumablesLowStock ?? '—'}
           sub="Статус: На складе"
-          neonColor="#ffaa00"
-          glowClass="glow-amber"
+          glowClass="border-l-4 border-amber-500"
+          iconBgClass="bg-amber-50"
+          iconTextClass="text-amber-600"
           onClick={() => onNavigate('consumables')}
         />
         <StatCard
-          index={3}
-          icon={<KeyRound className="w-5 h-5" />}
+          icon={<KeyRound className="w-6 h-6" />}
           label="ЭЦП истекает"
           value={tokenStats?.expiringSoon ?? '—'}
           sub="В течение 30 дней"
-          neonColor="#b400ff"
-          glowClass={tokenStats?.expiringSoon ? 'glow-purple' : ''}
+          glowClass={tokenStats?.expiringSoon ? "border-l-4 border-purple-500" : "border-l-4 border-slate-300"}
+          iconBgClass={tokenStats?.expiringSoon ? "bg-purple-50" : "bg-slate-100"}
+          iconTextClass={tokenStats?.expiringSoon ? "text-purple-600" : "text-slate-500"}
           urgent={(tokenStats?.expiringSoon ?? 0) > 0}
           onClick={() => onNavigate('tokens')}
         />
       </div>
 
       {/* ── Secondary panels ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
         {/* Equipment breakdown */}
-        <div className="card-cyber p-5 md:col-span-2">
-          <div className="section-title mb-5">
-            <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-            <span>Оборудование по типам</span>
+        <div className="surface p-6 md:col-span-2">
+          <div className="flex items-center gap-2 mb-6">
+            <BarChart3 className="w-5 h-5 text-slate-400" />
+            <h2 className="text-lg font-display font-bold text-slate-700">Оборудование по типам</h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {equipTypes.map(({ key, label, color }) => {
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {equipTypes.map(({ key, label, colorClass }) => {
               const count = equipStats?.byType?.[key] ?? 0;
               const pct = totalEquipment ? Math.round((count / totalEquipment) * 100) : 0;
               return (
-                <div
-                  key={key}
-                  className="p-3 relative group"
-                  style={{
-                    background: `${color}08`,
-                    border: `1px solid ${color}22`,
-                    clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)',
-                    transition: 'all 0.2s ease-out',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = `${color}55`;
-                    e.currentTarget.style.background = `${color}12`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = `${color}22`;
-                    e.currentTarget.style.background = `${color}08`;
-                  }}
-                >
-                  {/* Count */}
-                  <p
-                    className="text-2xl font-black tabular-nums mb-2"
-                    style={{
-                      fontFamily: 'Orbitron, monospace',
-                      color,
-                      textShadow: `0 0 10px ${color}66`,
-                    }}
-                  >
+                <div key={key} className="p-4 rounded-xl bg-slate-50 border border-slate-100 transition-colors hover:border-slate-300">
+                  <p className="text-2xl font-display font-bold text-slate-800 mb-2">
                     {count}
                   </p>
-
-                  {/* Progress bar */}
-                  <div
-                    className="h-[1px] w-full mb-2"
-                    style={{ background: `${color}22` }}
-                  >
+                  <div className="h-1.5 w-full bg-slate-200 rounded-full mb-3 overflow-hidden">
                     <div
-                      className="h-full transition-all duration-700"
-                      style={{
-                        width: `${Math.max(pct, 4)}%`,
-                        background: color,
-                        boxShadow: `0 0 6px ${color}`,
-                      }}
+                      className={clsx("h-full rounded-full transition-all duration-700", colorClass)}
+                      style={{ width: `${Math.max(pct, 2)}%` }}
                     />
                   </div>
-
-                  {/* Label */}
-                  <p
-                    className="text-[9px] uppercase tracking-widest"
-                    style={{ color: '#8888aa', fontFamily: 'JetBrains Mono, monospace' }}
-                  >
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                     {label} · {pct}%
                   </p>
                 </div>
@@ -357,51 +259,33 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </div>
 
         {/* Token status panel */}
-        <div className="card-cyber p-5">
-          <div className="section-title mb-5">
-            <KeyRound className="w-3.5 h-3.5 shrink-0" style={{ color: '#b400ff' }} />
-            <span style={{ color: '#b400ff', textShadow: '0 0 8px #b400ff88' }}>Статус ЭЦП</span>
+        <div className="surface p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <KeyRound className="w-5 h-5 text-purple-500" />
+            <h2 className="text-lg font-display font-bold text-slate-700">Статус ЭЦП</h2>
           </div>
 
-          <div className="space-y-3">
-            {tokenList.map(({ key, label, color, count }) => {
+          <div className="space-y-4">
+            {tokenList.map(({ key, label, colorClass, count }) => {
               const total = tokenList.reduce((a, b) => a + b.count, 0);
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
-                <div key={key} className="space-y-1.5">
+                <div key={key} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ background: color, boxShadow: `0 0 4px ${color}` }}
-                      />
-                      <span
-                        className="text-[10px] uppercase tracking-widest"
-                        style={{ color: '#8888aa', fontFamily: 'JetBrains Mono, monospace' }}
-                      >
+                      <span className={clsx("w-2 h-2 rounded-full", colorClass)} />
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                         {label}
                       </span>
                     </div>
-                    <span
-                      className="text-sm font-bold tabular-nums"
-                      style={{
-                        fontFamily: 'Orbitron, monospace',
-                        color,
-                        textShadow: `0 0 8px ${color}66`,
-                      }}
-                    >
+                    <span className="text-sm font-bold text-slate-800">
                       {count}
                     </span>
                   </div>
-                  {/* Mini bar */}
-                  <div className="h-[1px]" style={{ background: '#1e1e3a' }}>
+                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full transition-all duration-700"
-                      style={{
-                        width: `${Math.max(pct, 2)}%`,
-                        background: color,
-                        boxShadow: `0 0 4px ${color}`,
-                      }}
+                      className={clsx("h-full rounded-full transition-all duration-700", colorClass)}
+                      style={{ width: `${Math.max(pct, 2)}%` }}
                     />
                   </div>
                 </div>
@@ -411,22 +295,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
           {/* Expiring alert */}
           {(tokenStats?.expiringSoon ?? 0) > 0 && (
-            <div
-              className="mt-4 p-3 flex items-center gap-2"
-              style={{
-                background: 'rgba(255,170,0,0.08)',
-                border: '1px solid rgba(255,170,0,0.3)',
-                clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%)',
-              }}
-            >
-              <Clock
-                className="w-3.5 h-3.5 shrink-0"
-                style={{ color: '#ffaa00', filter: 'drop-shadow(0 0 4px #ffaa00)' }}
-              />
-              <span
-                className="text-[10px] uppercase tracking-wider"
-                style={{ color: '#ffaa00', fontFamily: 'JetBrains Mono, monospace' }}
-              >
+            <div className="mt-6 p-3 rounded-lg bg-amber-50 border border-amber-200 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-amber-500 shrink-0" />
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-700">
                 {tokenStats!.expiringSoon} истекает в 30 дней
               </span>
             </div>
@@ -435,48 +306,21 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       {/* ── Equipment status overview ── */}
-      <div className="card-cyber p-5">
-        <div className="section-title mb-5">
-          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-          <span>Статусы оборудования</span>
+      <div className="surface p-6 mb-6">
+        <div className="flex items-center gap-2 mb-6">
+          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+          <h2 className="text-lg font-display font-bold text-slate-700">Статусы оборудования</h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {statusItems.map(({ key, label, color }) => {
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {statusItems.map(({ key, label, colorClass, textClass }) => {
             const count = equipStats?.byStatus?.[key] ?? 0;
             return (
-              <div
-                key={key}
-                className="p-4 text-center"
-                style={{
-                  background: `${color}06`,
-                  border: `1px solid ${color}22`,
-                  clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
-                  transition: 'all 0.2s ease-out',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = `${color}44`;
-                  e.currentTarget.style.background = `${color}10`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${color}22`;
-                  e.currentTarget.style.background = `${color}06`;
-                }}
-              >
-                <p
-                  className="text-3xl font-black tabular-nums mb-1"
-                  style={{
-                    fontFamily: 'Orbitron, monospace',
-                    color,
-                    textShadow: `0 0 16px ${color}66`,
-                  }}
-                >
+              <div key={key} className={clsx("p-4 rounded-xl text-center border border-slate-100", colorClass)}>
+                <p className={clsx("text-3xl font-display font-bold mb-1", textClass)}>
                   {count}
                 </p>
-                <p
-                  className="text-[9px] uppercase tracking-widest"
-                  style={{ color: '#8888aa', fontFamily: 'JetBrains Mono, monospace' }}
-                >
+                <p className={clsx("text-xs font-bold uppercase tracking-wider", textClass, "opacity-80")}>
                   {label}
                 </p>
               </div>
@@ -486,29 +330,20 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       {/* ── System status footer ── */}
-      <div
-        className="mt-4 px-4 py-3 flex items-center justify-between"
-        style={{
-          background: 'rgba(0,245,255,0.03)',
-          border: '1px solid var(--color-border)',
-        }}
-      >
+      <div className="px-5 py-4 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#00ff88', boxShadow: '0 0 6px #00ff88', animation: 'var(--animate-pulse-slow)' }}
-          />
-          <span
-            className="text-[9px] uppercase tracking-[0.2em]"
-            style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}
-          >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
             Система активна · On-Premise · Защищено
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <Shield className="w-3 h-3" style={{ color: '#00ff88' }} />
-          <Zap className="w-3 h-3" style={{ color: '#ffaa00' }} />
-          <TrendingUp className="w-3 h-3" style={{ color: '#00f5ff' }} />
+        <div className="flex items-center gap-3">
+          <Shield className="w-4 h-4 text-slate-400" />
+          <Zap className="w-4 h-4 text-slate-400" />
+          <TrendingUp className="w-4 h-4 text-slate-400" />
         </div>
       </div>
     </div>

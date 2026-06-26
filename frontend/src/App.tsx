@@ -17,35 +17,14 @@ function AppInner() {
   // Ждём пока AuthContext проверит сохранённый токен
   if (loading) {
     return (
-      <div className="min-h-dvh flex items-center justify-center" style={{ background: 'var(--color-deep)' }}>
+      <div className="min-h-dvh flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
-          {/* Neon spinner */}
-          <div className="relative w-14 h-14">
-            <div
-              className="absolute inset-0 rounded-full animate-spin"
-              style={{
-                border: '2px solid transparent',
-                borderTopColor: '#00f5ff',
-                borderRightColor: '#00f5ff44',
-                filter: 'drop-shadow(0 0 6px #00f5ff)',
-              }}
-            />
-            <div
-              className="absolute inset-3 rounded-full animate-spin"
-              style={{
-                border: '1px solid transparent',
-                borderBottomColor: '#b400ff',
-                animationDirection: 'reverse',
-                animationDuration: '0.8s',
-                filter: 'drop-shadow(0 0 4px #b400ff)',
-              }}
-            />
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
+            <div className="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
           </div>
-          <p
-            className="text-xs uppercase tracking-[0.2em]"
-            style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}
-          >
-            INITIALIZING...
+          <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest">
+            Загрузка...
           </p>
         </div>
       </div>

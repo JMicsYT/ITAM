@@ -8,22 +8,18 @@ import { authApi, type AuthUser } from '../../api/auth';
 import { Modal } from '../ui/Modal';
 import { useToast } from '../ui/Toast';
 
-// ============================================================
-// UsersPage — Управление пользователями (только для admin)
-// ============================================================
-
 type Role = 'admin' | 'technician' | 'viewer';
 
-const ROLE_CONFIG: Record<Role, { label: string; color: string; icon: React.ReactNode }> = {
-  admin:      { label: 'Администратор', color: 'text-rose-400',   icon: <Shield className="w-3.5 h-3.5" /> },
-  technician: { label: 'Техник',        color: 'text-cyan-400',   icon: <Key className="w-3.5 h-3.5" /> },
-  viewer:     { label: 'Наблюдатель',   color: 'text-slate-400',  icon: <Users className="w-3.5 h-3.5" /> },
+const ROLE_CONFIG: Record<Role, { label: string; bg: string; text: string; icon: React.ReactNode }> = {
+  admin:      { label: 'Администратор', bg: 'bg-rose-50',  text: 'text-rose-700',   icon: <Shield className="w-3.5 h-3.5" /> },
+  technician: { label: 'Техник',        bg: 'bg-cyan-50',  text: 'text-cyan-700',   icon: <Key className="w-3.5 h-3.5" /> },
+  viewer:     { label: 'Наблюдатель',   bg: 'bg-slate-100', text: 'text-slate-700',  icon: <Users className="w-3.5 h-3.5" /> },
 };
 
 function RoleBadge({ role }: { role: Role }) {
   const cfg = ROLE_CONFIG[role] ?? ROLE_CONFIG.viewer;
   return (
-    <span className={clsx('badge flex items-center gap-1.5', cfg.color)}>
+    <span className={clsx('badge border border-transparent font-medium flex items-center gap-1.5', cfg.bg, cfg.text)}>
       {cfg.icon}
       {cfg.label}
     </span>
@@ -85,13 +81,13 @@ function CreateUserModal({
       <label className="form-label">{label}</label>
       <input
         type={type}
-        className={clsx('input-field', errors[name] && 'border-rose-500/50')}
+        className={clsx('input-field', errors[name] && 'border-red-500 bg-red-50')}
         placeholder={placeholder}
         value={form[name] as string}
         onChange={(e) => setForm((f) => ({ ...f, [name]: e.target.value }))}
         autoComplete={type === 'password' ? 'new-password' : 'off'}
       />
-      {errors[name] && <p className="text-xs text-rose-400 mt-1">{errors[name]}</p>}
+      {errors[name] && <p className="text-xs font-bold text-red-500 mt-1.5">{errors[name]}</p>}
     </div>
   );
 
@@ -112,8 +108,8 @@ function CreateUserModal({
           <option value="viewer">Наблюдатель</option>
         </select>
       </div>
-      <div className="flex gap-3 pt-2">
-        <button type="submit" className="btn-primary flex-1" disabled={submitting}>
+      <div className="flex gap-3 pt-4 border-t border-slate-100">
+        <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           <UserPlus className="w-4 h-4" />
           {submitting ? 'Создание...' : 'Создать'}
         </button>
@@ -154,8 +150,8 @@ function ChangePasswordModal({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-sm text-slate-400">
-        Изменение пароля для <strong className="text-slate-200">{user.fullName}</strong>
+      <p className="text-sm font-medium text-slate-500 mb-4">
+        Изменение пароля для <strong className="text-slate-800">{user.fullName}</strong>
       </p>
       <div>
         <label className="form-label">Новый пароль</label>
@@ -167,8 +163,8 @@ function ChangePasswordModal({
         <input type="password" className="input-field" value={confirm}
           onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" />
       </div>
-      <div className="flex gap-3 pt-2">
-        <button type="submit" className="btn-primary flex-1" disabled={submitting}>
+      <div className="flex gap-3 pt-4 border-t border-slate-100">
+        <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           {submitting ? 'Сохранение...' : 'Сохранить пароль'}
         </button>
         <button type="button" className="btn-ghost" onClick={onClose}>Отмена</button>
@@ -197,43 +193,40 @@ function UserRow({
   return (
     <div
       className={clsx(
-        'card-stat p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all',
-        !user.isActive && 'opacity-50'
+        'bg-white border border-slate-200 rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all hover:shadow-md active:scale-[0.99]',
+        !user.isActive && 'opacity-60 bg-slate-50 grayscale-[0.2]'
       )}
-      style={{ borderColor: '#1e1e3a' }}
     >
-      <div className="h-[1px] w-full absolute top-0 left-0" style={{ background: 'linear-gradient(90deg, rgba(0,245,255,0.2), transparent)' }} />
       {/* Avatar */}
       <div
         className={clsx(
-          'w-10 h-10 rounded-none flex items-center justify-center text-sm font-bold shrink-0',
-          user.isActive ? 'bg-[rgba(0,245,255,0.1)] text-[#00f5ff] border border-[#00f5ff55]' : 'bg-[#1e1e3a] text-[#555577] border border-[#1e1e3a]'
+          'w-12 h-12 rounded-full flex items-center justify-center text-lg font-display font-bold shrink-0',
+          user.isActive ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-500'
         )}
-        style={{ fontFamily: 'Orbitron, monospace', clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%)' }}
       >
         {user.fullName.charAt(0).toUpperCase()}
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <p className="font-semibold text-sm" style={{ color: '#e8eaff', fontFamily: 'JetBrains Mono, monospace' }}>{user.fullName}</p>
+        <div className="flex items-center gap-2 flex-wrap mb-1">
+          <p className="font-display font-bold text-slate-800 text-base">{user.fullName}</p>
           {isSelf && (
-            <span className="text-[10px] uppercase tracking-widest px-1.5 py-0.5 font-bold" style={{ color: '#00ff88', background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.3)' }}>
+            <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 font-bold rounded-full bg-green-100 text-green-700">
               Вы
             </span>
           )}
         </div>
-        <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: '#00f5ff', fontFamily: 'JetBrains Mono, monospace' }}>@{user.username}</p>
-        <div className="flex items-center gap-2 mt-2 flex-wrap">
+        <p className="text-xs font-medium text-slate-500 mb-2">@{user.username}</p>
+        <div className="flex items-center gap-2 flex-wrap">
           <RoleBadge role={user.role} />
           {user.isActive ? (
-            <span className="badge text-[#00ff88] border-[#00ff8855] flex items-center gap-1 bg-[rgba(0,255,136,0.05)]">
-              <CheckCircle2 className="w-3 h-3" /> Активен
+            <span className="badge border font-medium border-green-200 text-green-700 flex items-center gap-1.5 bg-green-50">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Активен
             </span>
           ) : (
-            <span className="badge text-[#ff2255] border-[#ff225555] flex items-center gap-1 bg-[rgba(255,34,85,0.05)]">
-              <XCircle className="w-3 h-3" /> Заблокирован
+            <span className="badge border font-medium border-red-200 text-red-700 flex items-center gap-1.5 bg-red-50">
+              <XCircle className="w-3.5 h-3.5" /> Заблокирован
             </span>
           )}
         </div>
@@ -241,26 +234,25 @@ function UserRow({
 
       {/* Actions */}
       {!isSelf && (
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 sm:self-center mt-3 sm:mt-0">
           <button
             onClick={onChangePassword}
-            className="btn-ghost text-xs py-2 px-3"
+            className="p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition-colors"
             title="Сменить пароль"
           >
-            <Key className="w-3.5 h-3.5" />
+            <Key className="w-4 h-4" />
           </button>
           <button
             onClick={onToggle}
             className={clsx(
-              'text-[10px] uppercase tracking-wider py-2 px-3 font-bold flex items-center gap-1.5 transition-all min-h-[44px]',
+              'px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center gap-2 transition-colors',
               user.isActive
-                ? 'bg-[rgba(255,34,85,0.08)] text-[#ff2255] border border-[rgba(255,34,85,0.4)] hover:bg-[rgba(255,34,85,0.15)] hover:shadow-[0_0_8px_rgba(255,34,85,0.4)]'
-                : 'bg-[rgba(0,255,136,0.08)] text-[#00ff88] border border-[rgba(0,255,136,0.4)] hover:bg-[rgba(0,255,136,0.15)] hover:shadow-[0_0_8px_rgba(0,255,136,0.4)]'
+                ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100'
+                : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-100'
             )}
-            style={{ clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
             title={user.isActive ? 'Заблокировать' : 'Активировать'}
           >
-            {user.isActive ? <LockKeyhole className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+            {user.isActive ? <LockKeyhole className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
             {user.isActive ? 'Заблокировать' : 'Активировать'}
           </button>
         </div>
@@ -304,26 +296,25 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-3xl mx-auto">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <Users className="w-5 h-5" style={{ color: '#00f5ff', filter: 'drop-shadow(0 0 6px #00f5ff)' }} />
-            <h1
-              className="text-xl md:text-2xl font-black uppercase tracking-widest"
-              style={{ fontFamily: 'Orbitron, monospace', color: '#e8eaff' }}
-            >
+            <div className="p-2 bg-cyan-100 text-cyan-600 rounded-lg">
+              <Users className="w-5 h-5" />
+            </div>
+            <h1 className="text-2xl font-display font-bold text-slate-800">
               Сотрудники
             </h1>
           </div>
-          <p className="text-[10px] uppercase tracking-[0.15em]" style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}>
-            // Управление персоналом
+          <p className="text-sm font-medium text-slate-500 ml-12">
+            Управление персоналом
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <button onClick={fetchUsers} className="btn-ghost py-2 px-3" title="Обновить">
-            <RefreshCw className={clsx('w-4 h-4', loading && 'animate-spin')} />
+          <button onClick={fetchUsers} className="btn-ghost bg-white border border-slate-200 shadow-sm py-2 px-3" title="Обновить">
+            <RefreshCw className={clsx('w-4 h-4 text-slate-500', loading && 'animate-spin')} />
           </button>
           <button onClick={() => setCreateOpen(true)} className="btn-primary">
             <UserPlus className="w-4 h-4" /> Создать
@@ -332,21 +323,26 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
       </div>
 
       {/* User List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {loading ? (
           [1, 2, 3].map((i) => (
-            <div key={i} className="card-cyber p-4">
+            <div key={i} className="surface p-4 rounded-xl">
               <div className="flex items-center gap-4">
-                <div className="skeleton w-10 h-10 shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <div className="skeleton h-4 w-40" />
-                  <div className="skeleton h-3 w-24" />
+                <div className="skeleton w-12 h-12 rounded-full shrink-0" />
+                <div className="flex-1 space-y-3">
+                  <div className="skeleton h-4 w-40 rounded" />
+                  <div className="skeleton h-3 w-24 rounded" />
                 </div>
               </div>
             </div>
           ))
         ) : users.length === 0 ? (
-          <p className="text-center text-slate-500 py-10">Пользователи не найдены</p>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-slate-300" />
+            </div>
+            <p className="font-bold text-slate-700">Пользователи не найдены</p>
+          </div>
         ) : (
           users.map((u) => (
             <UserRow

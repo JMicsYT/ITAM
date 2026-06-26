@@ -1,20 +1,20 @@
 import clsx from 'clsx';
 
 // ============================================================
-// Status badges — Cyberpunk neon pills for statuses
+// Status badges — Soft UI pills for statuses
 // ============================================================
 
 type Variant = 'green' | 'blue' | 'amber' | 'red' | 'slate' | 'cyan' | 'purple';
 
-// Cyberpunk neon badge colors
-const variantStyles: Record<Variant, { color: string; bg: string; border: string }> = {
-  green:  { color: '#00ff88', bg: 'rgba(0,255,136,0.08)',  border: 'rgba(0,255,136,0.3)' },
-  blue:   { color: '#0080ff', bg: 'rgba(0,128,255,0.08)',  border: 'rgba(0,128,255,0.3)' },
-  amber:  { color: '#ffaa00', bg: 'rgba(255,170,0,0.08)',  border: 'rgba(255,170,0,0.3)' },
-  red:    { color: '#ff2255', bg: 'rgba(255,34,85,0.08)',  border: 'rgba(255,34,85,0.3)' },
-  slate:  { color: '#555577', bg: 'rgba(85,85,119,0.08)',  border: 'rgba(85,85,119,0.3)' },
-  cyan:   { color: '#00f5ff', bg: 'rgba(0,245,255,0.08)',  border: 'rgba(0,245,255,0.3)' },
-  purple: { color: '#b400ff', bg: 'rgba(180,0,255,0.08)',  border: 'rgba(180,0,255,0.3)' },
+// Soft UI badge colors
+const variantStyles: Record<Variant, string> = {
+  green:  'bg-emerald-50 text-emerald-700 border-emerald-200',
+  blue:   'bg-blue-50 text-blue-700 border-blue-200',
+  amber:  'bg-amber-50 text-amber-700 border-amber-200',
+  red:    'bg-red-50 text-red-700 border-red-200',
+  slate:  'bg-slate-100 text-slate-700 border-slate-200',
+  cyan:   'bg-sky-50 text-sky-700 border-sky-200',
+  purple: 'bg-purple-50 text-purple-700 border-purple-200',
 };
 
 // Equipment status mapping
@@ -55,17 +55,9 @@ interface BadgeProps {
 }
 
 export function Badge({ variant = 'slate', children, className }: BadgeProps) {
-  const styles = variantStyles[variant];
   return (
     <span
-      className={clsx('badge', className)}
-      style={{
-        color: styles.color,
-        background: styles.bg,
-        borderColor: styles.border,
-        textShadow: `0 0 6px ${styles.color}88`,
-        fontFamily: 'JetBrains Mono, monospace',
-      }}
+      className={clsx('badge border', variantStyles[variant], className)}
     >
       {children}
     </span>

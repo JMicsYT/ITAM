@@ -7,10 +7,6 @@ import {
 import type { NavSection } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 
-// ============================================================
-// Layout: Cyberpunk Sidebar (desktop) + HUD Bottom Nav (mobile)
-// ============================================================
-
 interface LayoutProps {
   active: NavSection;
   onNavigate: (s: NavSection) => void;
@@ -22,51 +18,13 @@ const navItems: {
   label: string;
   shortLabel: string;
   icon: React.ReactNode;
-  neon: string;
-  glowColor: string;
   adminOnly?: boolean;
 }[] = [
-  {
-    key: 'dashboard',
-    label: 'Дашборд',
-    shortLabel: 'HQ',
-    icon: <LayoutDashboard className="w-4 h-4" />,
-    neon: 'text-[#00f5ff]',
-    glowColor: '#00f5ff',
-  },
-  {
-    key: 'equipment',
-    label: 'Оборудование',
-    shortLabel: 'EQP',
-    icon: <Server className="w-4 h-4" />,
-    neon: 'text-[#00ff88]',
-    glowColor: '#00ff88',
-  },
-  {
-    key: 'consumables',
-    label: 'Расходники',
-    shortLabel: 'CNS',
-    icon: <Package className="w-4 h-4" />,
-    neon: 'text-[#ffaa00]',
-    glowColor: '#ffaa00',
-  },
-  {
-    key: 'tokens',
-    label: 'Рутокены',
-    shortLabel: 'TKN',
-    icon: <KeyRound className="w-4 h-4" />,
-    neon: 'text-[#b400ff]',
-    glowColor: '#b400ff',
-  },
-  {
-    key: 'users',
-    label: 'Пользователи',
-    shortLabel: 'USR',
-    icon: <Users2 className="w-4 h-4" />,
-    neon: 'text-[#ff2255]',
-    glowColor: '#ff2255',
-    adminOnly: true,
-  },
+  { key: 'dashboard',   label: 'Дашборд',      shortLabel: 'Дашборд',  icon: <LayoutDashboard className="w-5 h-5" /> },
+  { key: 'equipment',   label: 'Оборудование', shortLabel: 'Оборуд.',  icon: <Server className="w-5 h-5" /> },
+  { key: 'consumables', label: 'Расходники',   shortLabel: 'Расход.', icon: <Package className="w-5 h-5" /> },
+  { key: 'tokens',      label: 'Рутокены',     shortLabel: 'Токены',   icon: <KeyRound className="w-5 h-5" /> },
+  { key: 'users',       label: 'Пользователи', shortLabel: 'Польз.',   icon: <Users2 className="w-5 h-5" />, adminOnly: true },
 ];
 
 function SidebarNavItem({
@@ -76,38 +34,18 @@ function SidebarNavItem({
     <button
       onClick={onClick}
       className={clsx(
-        'relative w-full flex items-center gap-3 px-4 py-3 text-xs font-mono font-medium uppercase tracking-[0.1em]',
-        'transition-all duration-200 group border-l-2',
+        'w-full flex items-center gap-3 px-4 py-3 mx-2 rounded-xl text-sm font-semibold transition-all duration-200',
         active
-          ? 'border-current bg-white/5 text-current'
-          : 'border-transparent text-[#555577] hover:text-[#8888aa] hover:bg-white/[0.02]'
+          ? 'bg-blue-50 text-blue-700'
+          : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
       )}
-      style={{
-        color: active ? item.glowColor : undefined,
-        borderColor: active ? item.glowColor : undefined,
-        textShadow: active ? `0 0 8px ${item.glowColor}88` : undefined,
-      }}
+      style={{ width: 'calc(100% - 16px)' }}
     >
-      {/* Icon */}
-      <span
-        className="shrink-0 transition-all duration-200"
-        style={active ? { filter: `drop-shadow(0 0 4px ${item.glowColor})` } : {}}
-      >
+      <span className={clsx("shrink-0", active ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600")}>
         {item.icon}
       </span>
-
-      {/* Label */}
       <span className="flex-1 text-left">{item.label}</span>
-
-      {/* Active indicator */}
-      {active && (
-        <ChevronRight className="w-3 h-3 opacity-60" />
-      )}
-
-      {/* Hover scanline effect */}
-      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-        style={{ background: `linear-gradient(90deg, ${item.glowColor}08, transparent)` }}
-      />
+      {active && <ChevronRight className="w-4 h-4 opacity-50" />}
     </button>
   );
 }
@@ -117,86 +55,44 @@ export function Layout({ active, onNavigate, children }: LayoutProps) {
   const visibleNav = navItems.filter((item) => !item.adminOnly || user?.role === 'admin');
 
   return (
-    <div className="flex h-dvh overflow-hidden" style={{ background: 'var(--color-deep)' }}>
-
+    <div className="flex h-dvh overflow-hidden bg-slate-50">
       {/* ── Desktop Sidebar ─────────────────────────────────── */}
-      <aside
-        className="hidden md:flex flex-col w-60 shrink-0 relative"
-        style={{
-          background: 'var(--color-surface)',
-          borderRight: '1px solid var(--color-border)',
-        }}
-      >
-        {/* Vertical neon line decoration */}
-        <div
-          className="absolute top-0 right-0 w-[1px] h-full pointer-events-none"
-          style={{
-            background: 'linear-gradient(to bottom, transparent, #00f5ff44, #b400ff44, transparent)',
-          }}
-        />
-
+      <aside className="hidden md:flex flex-col w-64 shrink-0 bg-white border-r border-slate-200">
+        
         {/* Logo / Brand */}
-        <div
-          className="px-5 py-6 shrink-0"
-          style={{ borderBottom: '1px solid var(--color-border)' }}
-        >
+        <div className="px-6 py-6 shrink-0 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            {/* HUD logo box */}
-            <div
-              className="w-10 h-10 flex items-center justify-center relative shrink-0"
-              style={{
-                border: '1px solid #00f5ff',
-                background: 'rgba(0,245,255,0.08)',
-                clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
-                boxShadow: '0 0 12px #00f5ff33, inset 0 0 12px #00f5ff11',
-              }}
-            >
-              <Cpu className="w-5 h-5" style={{ color: '#00f5ff', filter: 'drop-shadow(0 0 4px #00f5ff)' }} />
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <Cpu className="w-6 h-6" />
             </div>
-
             <div>
-              <div
-                className="font-display font-black text-base tracking-widest uppercase"
-                style={{
-                  fontFamily: 'Orbitron, monospace',
-                  color: '#00f5ff',
-                  textShadow: '0 0 12px #00f5ff88, 0 0 24px #00f5ff44',
-                  letterSpacing: '0.2em',
-                }}
-              >
+              <div className="font-display font-bold text-xl tracking-wide text-slate-800">
                 ITAM
               </div>
-              <div
-                className="text-[9px] tracking-[0.2em] uppercase mt-0.5"
-                style={{ color: '#555577', fontFamily: 'JetBrains Mono, monospace' }}
-              >
-                ASSET CONTROL
+              <div className="text-[10px] tracking-wider uppercase text-slate-400 font-semibold mt-0.5">
+                Asset Control
               </div>
             </div>
           </div>
 
           {/* Status indicator */}
           <div className="flex items-center gap-2 mt-4">
-            <div
-              className="flex items-center gap-1.5 text-[9px] tracking-widest uppercase"
-              style={{ color: '#00ff88', fontFamily: 'JetBrains Mono, monospace' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" style={{ boxShadow: '0 0 6px #00ff88' }} />
-              <Wifi className="w-2.5 h-2.5" />
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <Wifi className="w-3 h-3" />
               <span>On-Premise</span>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-3 overflow-y-auto">
-          <div
-            className="px-4 py-2 text-[8px] tracking-[0.25em] uppercase mb-1"
-            style={{ color: '#333355', fontFamily: 'JetBrains Mono, monospace' }}
-          >
-            // Navigation
+        <nav className="flex-1 py-4 overflow-y-auto flex flex-col gap-1">
+          <div className="px-6 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+            Меню
           </div>
-
           {visibleNav.map((item) => (
             <SidebarNavItem
               key={item.key}
@@ -208,71 +104,29 @@ export function Layout({ active, onNavigate, children }: LayoutProps) {
         </nav>
 
         {/* Footer — User info */}
-        <div
-          className="px-4 py-4 shrink-0"
-          style={{ borderTop: '1px solid var(--color-border)' }}
-        >
-          {/* User block */}
-          <div
-            className="p-3 mb-3"
-            style={{
-              background: 'rgba(0,245,255,0.03)',
-              border: '1px solid var(--color-border)',
-              clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)',
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-7 h-7 flex items-center justify-center shrink-0"
-                style={{
-                  border: '1px solid #555577',
-                  background: 'rgba(85,85,119,0.15)',
-                  clipPath: 'polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))',
-                }}
-              >
-                <UserCircle className="w-4 h-4" style={{ color: '#8888aa' }} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p
-                  className="text-[11px] font-semibold truncate"
-                  style={{ color: '#e8eaff', fontFamily: 'JetBrains Mono, monospace' }}
-                >
-                  {user?.fullName}
+        <div className="p-4 shrink-0 border-t border-slate-100">
+          <div className="p-3 mb-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+              <UserCircle className="w-6 h-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-slate-700 truncate">
+                {user?.fullName}
+              </p>
+              <div className="flex items-center gap-1 mt-0.5">
+                <Shield className="w-3 h-3 text-blue-500" />
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  {user?.role}
                 </p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <Shield className="w-2.5 h-2.5" style={{ color: '#00f5ff' }} />
-                  <p
-                    className="text-[9px] uppercase tracking-widest"
-                    style={{ color: '#00f5ff99', fontFamily: 'JetBrains Mono, monospace' }}
-                  >
-                    {user?.role}
-                  </p>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Logout */}
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 text-[10px] uppercase tracking-[0.1em] transition-all duration-200"
-            style={{
-              color: '#555577',
-              border: '1px solid #1e1e3a',
-              fontFamily: 'JetBrains Mono, monospace',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#ff2255';
-              e.currentTarget.style.borderColor = '#ff225544';
-              e.currentTarget.style.background = 'rgba(255,34,85,0.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#555577';
-              e.currentTarget.style.borderColor = '#1e1e3a';
-              e.currentTarget.style.background = 'transparent';
-            }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
           >
-            <LogOut className="w-3 h-3" />
+            <LogOut className="w-4 h-4" />
             <span>Выход</span>
           </button>
         </div>
@@ -280,117 +134,55 @@ export function Layout({ active, onNavigate, children }: LayoutProps) {
 
       {/* ── Main Content Area ─────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-
+        
         {/* Mobile topbar */}
-        <header
-          className="md:hidden flex items-center justify-between px-4 py-3 shrink-0"
-          style={{
-            background: 'var(--color-surface)',
-            borderBottom: '1px solid var(--color-border)',
-          }}
-        >
-          {/* Logo */}
+        <header className="md:hidden flex items-center justify-between px-4 py-3 shrink-0 bg-white border-b border-slate-200">
           <div className="flex items-center gap-2.5">
-            <div
-              className="w-8 h-8 flex items-center justify-center"
-              style={{
-                border: '1px solid #00f5ff',
-                background: 'rgba(0,245,255,0.08)',
-                clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px))',
-              }}
-            >
-              <Cpu className="w-4 h-4" style={{ color: '#00f5ff' }} />
+            <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+              <Cpu className="w-5 h-5" />
             </div>
-            <span
-              className="font-black text-sm tracking-widest uppercase"
-              style={{
-                fontFamily: 'Orbitron, monospace',
-                color: '#00f5ff',
-                textShadow: '0 0 10px #00f5ff88',
-              }}
-            >
+            <span className="font-display font-bold text-lg tracking-wide text-slate-800">
               ITAM
             </span>
           </div>
 
-          {/* Active section name */}
-          <span
-            className="text-xs uppercase tracking-widest"
-            style={{ color: '#8888aa', fontFamily: 'JetBrains Mono, monospace' }}
-          >
+          <span className="text-sm font-bold uppercase text-slate-500">
             {navItems.find((n) => n.key === active)?.label}
           </span>
 
-          {/* Logout */}
           <button
             onClick={logout}
-            className="p-2 transition-colors"
-            style={{ color: '#555577' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#ff2255'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#555577'; }}
+            className="p-2 text-slate-500 hover:text-red-600 transition-colors"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-5 h-5" />
           </button>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
+        <main className="flex-1 overflow-y-auto pb-20 md:pb-0 px-4 md:px-8 py-6">
           {children}
         </main>
       </div>
 
-      {/* ── Mobile HUD Bottom Navigation ─────────────────── */}
-      <nav
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 bottom-nav-safe"
-        style={{
-          background: 'rgba(10,10,15,0.97)',
-          borderTop: '1px solid var(--color-border)',
-          backdropFilter: 'blur(20px)',
-        }}
-      >
-        {/* Top neon line */}
-        <div
-          className="h-[1px] w-full"
-          style={{
-            background: 'linear-gradient(90deg, transparent, #00f5ff44, #b400ff44, transparent)',
-          }}
-        />
-
-        <div className="flex items-center justify-around px-1 py-2">
+      {/* ── Mobile Bottom Navigation ─────────────────── */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-slate-200 bottom-nav-safe shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center justify-around px-2 py-2">
           {visibleNav.map((item) => {
             const isActive = active === item.key;
             return (
               <button
                 key={item.key}
                 onClick={() => onNavigate(item.key)}
-                className="flex flex-col items-center gap-1 px-2 py-2 min-h-[52px] min-w-[56px] transition-all duration-200 relative"
+                className="flex flex-col items-center gap-1 p-2 min-w-[64px] transition-colors relative rounded-xl"
                 style={{
-                  color: isActive ? item.glowColor : '#555577',
-                  textShadow: isActive ? `0 0 8px ${item.glowColor}88` : undefined,
+                  color: isActive ? 'var(--color-primary)' : '#64748B',
+                  background: isActive ? '#EFF6FF' : 'transparent',
                 }}
               >
-                {/* Active indicator dot */}
-                {isActive && (
-                  <span
-                    className="absolute top-0.5 left-1/2 -translate-x-1/2 w-4 h-[2px] rounded-full"
-                    style={{
-                      background: item.glowColor,
-                      boxShadow: `0 0 8px ${item.glowColor}`,
-                    }}
-                  />
-                )}
-                <span
-                  className="transition-all duration-200"
-                  style={{
-                    filter: isActive ? `drop-shadow(0 0 4px ${item.glowColor})` : undefined,
-                  }}
-                >
+                <span className={isActive ? "text-blue-600" : "text-slate-400"}>
                   {item.icon}
                 </span>
-                <span
-                  className="text-[9px] uppercase tracking-[0.08em]"
-                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                >
+                <span className="text-[10px] font-bold">
                   {item.shortLabel}
                 </span>
               </button>
