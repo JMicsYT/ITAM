@@ -1,0 +1,155 @@
+// ============================================================
+// IT Asset Management — Prisma Schema
+// Provider: PostgreSQL (On-Premise, локальный сервер)
+// ============================================================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ------------------------------------------------------------
+// Модель 1: Оборудование (Equipment)
+// Охватывает: ИБП, Принтеры/МФУ, ПК, Ноутбуки, Серверы, Мониторы
+// ------------------------------------------------------------
+model Equipment {
+  id           String   @id @default(uuid())
+
+  // Тип устройства: ups | printer | pc | laptop | server | monitor
+  type         String
+
+  brand        String   // Производитель (HP, Dell, Kyocera, APC...)
+  model        String   // Модель устройства
+
+  // Серийный номер уникален по типу устройства (глобальная уникальность)
+  serialNumber String   @unique
+
+  // Статус: in_use | storage | repair | decommissioned
+  status       String   @default("storage")
+
+  location     String   // Кабинет / отдел (например, "Каб. 402", "Серверная")
+
+  assignedTo   String?  // ФИО сотрудника (опционально)
+  ipAddress    String?  // IP-адрес (для ПК, серверов, принтеров с сетевым интерфейсом)
+
+  // Технические характеристики в свободной форме (RAM, CPU, мощность ИБП...)
+  specs        Json?
+
+  notes        String?  // Произвольные заметки
+
+  // Прикреплённые документы (акты, паспорта, накладные) — массив путей к PDF
+  documentUrls Json     @default("[]")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("equipment")
+}
+
+// ------------------------------------------------------------
+// Модель 2: Расходники (Consumable)
+// Охватывает: Картриджи (cartridge), Фотобарабаны (drum_unit)
+// Каждая запись — уникальный экземпляр со своим серийным номером
+// ------------------------------------------------------------
+model Consumable {
+  id           String   @id @default(uuid())
+
+  // Тип расходника: cartridge | drum_unit
+  type         String
+
+  // Артикул/модель расходника (например, "Kyocera TK-1170", "HP CE285A")
+  model        String
+
+  // Уникальный серийный номер конкретного экземпляра
+  serialNumber String   @unique
+
+  // Статус: in_stock | in_use | depleted | written_off
+  status       String   @default("in_stock")
+
+  // Совместимые принтеры — хранится как JSON-массив строк
+  // Пример: ["Kyocera ECOSYS M2135dn", "Kyocera ECOSYS P2235d"]
+  compatibleWith Json
+
+  location     String   // Место хранения ("Склад А", "Шкаф 3")
+
+  notes        String?  // Произвольные заметки (например, установлен в принтер)
+
+  // Прикреплённые документы (акты, накладные) — массив относительных путей к PDF
+  documentUrls Json     @default("[]")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("consumables")
+}
+
+// ------------------------------------------------------------
+// Модель 3: Рутокены и ЭЦП (Token)
+// Охватывает: физические Рутокены с сертификатами ЭЦП
+// ------------------------------------------------------------
+model Token {
+  id              String   @id @default(uuid())
+
+  serialNumber    String   @unique // Серийный номер устройства Рутокен
+
+  issuedTo        String   // ФИО сотрудника-владельца
+
+  // Тип сертификата: "ФНС", "Казначейство", "Контур", "ЕГАИС" и т.д.
+  certificateType String
+
+  expirationDate  DateTime // Дата истечения срока действия сертификата
+
+  // Статус: active | revoked | expired | in_safe
+  status          String   @default("active")
+
+  notes           String?  // Заметки (например, PIN, место хранения)
+
+  // Прикреплённые документы (доверенности, сертификаты) — массив путей к PDF
+  documentUrls    Json     @default("[]")
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("tokens")
+}
+
+// ------------------------------------------------------------
+// Модель 4: Пользователи системы (аутентификация)
+// ------------------------------------------------------------
+model User {
+  id           String     @id @default(uuid())
+  username     String     @unique
+  passwordHash String
+  fullName     String
+  // Роль: admin | technician | viewer
+  role         String     @default("technician")
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+// ------------------------------------------------------------
+// Модель 5: Журнал изменений (Audit Log)
+// ------------------------------------------------------------
+model AuditLog {
+  id         String   @id @default(uuid())
+  // Действие: EQUIPMENT_CREATE | EQUIPMENT_UPDATE | EQUIPMENT_DELETE |
+  //           CONSUMABLE_ADJUST | TOKEN_REVOKE | USER_LOGIN | ...
+  action     String
+  entityType String   // "Equipment" | "Consumable" | "Token"
+  entityId   String
+  // Снимок данных ДО и ПОСЛЕ изменения
+  diff       Json?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}

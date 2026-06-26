@@ -1,0 +1,63 @@
+# ============================================================
+# IT Asset Management — Docker Compose
+# Разворачивает PostgreSQL (On-Premise) + pgAdmin для администрирования БД
+# ============================================================
+
+services:
+
+  # ----------------------------------------------------------
+  # PostgreSQL — основная база данных (строго локально)
+  # ----------------------------------------------------------
+  postgres:
+    image: dockerhub.timeweb.cloud/library/postgres:16-alpine
+    container_name: itam_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-itam_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-itam_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-itam_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"       # Map to 5433 on host to avoid conflict with native Windows PostgreSQL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Данные сохраняются между перезапусками
+    networks:
+      - itam_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-itam_user} -d ${POSTGRES_DB:-itam_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------
+  # pgAdmin — веб-интерфейс для управления PostgreSQL (опционально)
+  # Доступен по адресу: http://localhost:5050
+  # ----------------------------------------------------------
+  pgadmin:
+    image: dockerhub.timeweb.cloud/dpage/pgadmin4:latest
+    container_name: itam_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"       # Одиночный пользователь (без логина)
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - itam_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+# ----------------------------------------------------------
+# Сети и именованные тома
+# ----------------------------------------------------------
+networks:
+  itam_network:
+    driver: bridge
+
+volumes:
+  postgres_data:   # Основные данные PostgreSQL
+  pgadmin_data:    # Конфигурация pgAdmin
