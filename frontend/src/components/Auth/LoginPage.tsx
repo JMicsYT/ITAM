@@ -26,31 +26,31 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh flex items-center justify-center p-4 bg-slate-50 relative overflow-hidden">
+    <div className="min-h-dvh flex items-center justify-center p-4 bg-slate-950 relative overflow-hidden">
       <div className="relative w-full max-w-sm animate-fade-in z-10">
 
         {/* Logo block */}
         <div className="text-center mb-8">
-          <div className="inline-flex w-20 h-20 items-center justify-center mb-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-            <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center">
-              <Cpu className="w-8 h-8 text-blue-600" />
+          <div className="inline-flex w-20 h-20 items-center justify-center mb-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+            <div className="w-16 h-16 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Cpu className="w-8 h-8 text-blue-500" />
             </div>
           </div>
-          <h1 className="text-3xl font-display font-black tracking-widest mb-1 text-slate-800">
+          <h1 className="text-3xl font-display font-black tracking-widest mb-1 text-slate-100">
             ITAM
           </h1>
-          <p className="text-xs font-medium uppercase tracking-widest text-slate-500">
+          <p className="text-xs font-medium uppercase tracking-widest text-slate-400">
             Asset Control System v3.0
           </p>
         </div>
 
         {/* Login card */}
-        <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50">
-          <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">Авторизация</h2>
+        <div className="bg-slate-900 rounded-3xl p-8 border border-slate-800 shadow-xl shadow-slate-900/50">
+          <h2 className="text-xl font-bold text-slate-100 mb-6 text-center">Авторизация</h2>
 
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-3 p-4 mb-6 bg-red-50 border border-red-100 rounded-xl text-sm text-red-700">
+            <div className="flex items-start gap-3 p-4 mb-6 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400">
               <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
               <p className="font-medium">{error}</p>
             </div>
@@ -59,11 +59,11 @@ export function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Username */}
             <div>
-              <label className="form-label block mb-2 text-sm font-bold text-slate-700">Логин</label>
+              <label className="form-label block mb-2 text-sm font-bold text-slate-300">Логин</label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
                 <input
-                  className={clsx("input-field pl-12 py-3 rounded-xl w-full", error && "border-red-300 focus:border-red-500 focus:ring-red-500")}
+                  className={clsx("input-field pl-12 py-3 rounded-xl w-full", error && "border-red-500 focus:border-red-500 focus:ring-red-500")}
                   autoComplete="username"
                   placeholder="admin"
                   value={username}
@@ -75,11 +75,11 @@ export function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="form-label block mb-2 text-sm font-bold text-slate-700">Пароль</label>
+              <label className="form-label block mb-2 text-sm font-bold text-slate-300">Пароль</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
                 <input
-                  className={clsx("input-field pl-12 pr-12 py-3 rounded-xl w-full", error && "border-red-300 focus:border-red-500 focus:ring-red-500")}
+                  className={clsx("input-field pl-12 pr-12 py-3 rounded-xl w-full", error && "border-red-500 focus:border-red-500 focus:ring-red-500")}
                   type={showPass ? 'text' : 'password'}
                   autoComplete="current-password"
                   placeholder="••••••••"
@@ -90,7 +90,7 @@ export function LoginPage() {
                   type="button"
                   tabIndex={-1}
                   onClick={() => setShowPass((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -100,7 +100,7 @@ export function LoginPage() {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center mt-4"
+              className="w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center mt-4"
               disabled={loading}
             >
               {loading ? (
@@ -117,7 +117,7 @@ export function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs font-medium text-slate-400 mt-8">
+        <p className="text-center text-xs font-medium text-slate-500 mt-8">
           On-Premise · Encrypted · Local Storage
         </p>
       </div>

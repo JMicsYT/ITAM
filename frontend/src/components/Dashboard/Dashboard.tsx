@@ -34,23 +34,23 @@ function StatCard({ icon, label, value, sub, glowClass, iconBgClass, iconTextCla
           {icon}
         </div>
         {urgent && (
-          <div className="flex items-center gap-1.5 shrink-0 bg-red-50 px-2 py-1 rounded-md text-red-600">
+          <div className="flex items-center gap-1.5 shrink-0 bg-red-500/10 px-2 py-1 rounded-md text-red-400">
             <AlertTriangle className="w-3.5 h-3.5" />
             <span className="text-[10px] font-bold uppercase tracking-wider">Alert</span>
           </div>
         )}
       </div>
 
-      <div className="text-3xl font-display font-bold text-slate-800 mb-1">
+      <div className="text-3xl font-display font-bold text-slate-100 mb-1">
         {value}
       </div>
 
-      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+      <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
         {label}
       </div>
 
       {sub && (
-        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+        <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
           {sub}
         </div>
       )}
@@ -146,10 +146,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   ];
 
   const statusItems = [
-    { key: 'in_use',         label: 'В эксплуатации', colorClass: 'bg-emerald-50', textClass: 'text-emerald-700' },
-    { key: 'storage',        label: 'На складе',       colorClass: 'bg-sky-50', textClass: 'text-sky-700' },
-    { key: 'repair',         label: 'В ремонте',       colorClass: 'bg-amber-50', textClass: 'text-amber-700' },
-    { key: 'decommissioned', label: 'Списано',         colorClass: 'bg-slate-100', textClass: 'text-slate-700' },
+    { key: 'in_use',         label: 'В эксплуатации', colorClass: 'bg-emerald-500/10', textClass: 'text-emerald-400' },
+    { key: 'storage',        label: 'На складе',       colorClass: 'bg-sky-500/10', textClass: 'text-sky-400' },
+    { key: 'repair',         label: 'В ремонте',       colorClass: 'bg-amber-500/10', textClass: 'text-amber-400' },
+    { key: 'decommissioned', label: 'Списано',         colorClass: 'bg-slate-500/10', textClass: 'text-slate-400' },
   ];
 
   return (
@@ -158,21 +158,21 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       {/* ── Page header ── */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
-          <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+          <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg">
             <Cpu className="w-5 h-5" />
           </div>
-          <h1 className="text-2xl font-display font-bold text-slate-800">
+          <h1 className="text-2xl font-display font-bold text-slate-100">
             Обзор системы
           </h1>
         </div>
-        <p className="text-sm text-slate-500 font-medium ml-12">
+        <p className="text-sm text-slate-400 font-medium ml-12">
           Состояние инфраструктуры и оборудования
         </p>
       </div>
 
       {/* Error banner */}
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 flex items-center gap-3 text-sm font-medium">
+        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-3 text-sm font-medium">
           <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
@@ -186,8 +186,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           value={totalEquipment}
           sub="Всех типов"
           glowClass="border-l-4 border-blue-500"
-          iconBgClass="bg-blue-50"
-          iconTextClass="text-blue-600"
+          iconBgClass="bg-blue-500/10"
+          iconTextClass="text-blue-400"
           onClick={() => onNavigate('equipment')}
         />
         <StatCard
@@ -195,9 +195,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           label="В ремонте"
           value={inRepair}
           sub="Требует внимания"
-          glowClass={inRepair > 0 ? "border-l-4 border-red-500" : "border-l-4 border-slate-300"}
-          iconBgClass={inRepair > 0 ? "bg-red-50" : "bg-slate-100"}
-          iconTextClass={inRepair > 0 ? "text-red-600" : "text-slate-500"}
+          glowClass={inRepair > 0 ? "border-l-4 border-red-500" : "border-l-4 border-slate-700"}
+          iconBgClass={inRepair > 0 ? "bg-red-500/10" : "bg-slate-800"}
+          iconTextClass={inRepair > 0 ? "text-red-400" : "text-slate-400"}
           urgent={inRepair > 0}
           onClick={() => onNavigate('equipment')}
         />
@@ -207,8 +207,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           value={consumablesLowStock ?? '—'}
           sub="Статус: На складе"
           glowClass="border-l-4 border-amber-500"
-          iconBgClass="bg-amber-50"
-          iconTextClass="text-amber-600"
+          iconBgClass="bg-amber-500/10"
+          iconTextClass="text-amber-400"
           onClick={() => onNavigate('consumables')}
         />
         <StatCard
@@ -216,9 +216,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           label="ЭЦП истекает"
           value={tokenStats?.expiringSoon ?? '—'}
           sub="В течение 30 дней"
-          glowClass={tokenStats?.expiringSoon ? "border-l-4 border-purple-500" : "border-l-4 border-slate-300"}
-          iconBgClass={tokenStats?.expiringSoon ? "bg-purple-50" : "bg-slate-100"}
-          iconTextClass={tokenStats?.expiringSoon ? "text-purple-600" : "text-slate-500"}
+          glowClass={tokenStats?.expiringSoon ? "border-l-4 border-purple-500" : "border-l-4 border-slate-700"}
+          iconBgClass={tokenStats?.expiringSoon ? "bg-purple-500/10" : "bg-slate-800"}
+          iconTextClass={tokenStats?.expiringSoon ? "text-purple-400" : "text-slate-400"}
           urgent={(tokenStats?.expiringSoon ?? 0) > 0}
           onClick={() => onNavigate('tokens')}
         />
@@ -231,7 +231,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <div className="surface p-6 md:col-span-2">
           <div className="flex items-center gap-2 mb-6">
             <BarChart3 className="w-5 h-5 text-slate-400" />
-            <h2 className="text-lg font-display font-bold text-slate-700">Оборудование по типам</h2>
+            <h2 className="text-lg font-display font-bold text-slate-200">Оборудование по типам</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -239,17 +239,17 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               const count = equipStats?.byType?.[key] ?? 0;
               const pct = totalEquipment ? Math.round((count / totalEquipment) * 100) : 0;
               return (
-                <div key={key} className="p-4 rounded-xl bg-slate-50 border border-slate-100 transition-colors hover:border-slate-300">
-                  <p className="text-2xl font-display font-bold text-slate-800 mb-2">
+                <div key={key} className="p-4 rounded-xl bg-slate-800 border border-slate-700/50 transition-colors hover:border-slate-600">
+                  <p className="text-2xl font-display font-bold text-slate-100 mb-2">
                     {count}
                   </p>
-                  <div className="h-1.5 w-full bg-slate-200 rounded-full mb-3 overflow-hidden">
+                  <div className="h-1.5 w-full bg-slate-700 rounded-full mb-3 overflow-hidden">
                     <div
                       className={clsx("h-full rounded-full transition-all duration-700", colorClass)}
                       style={{ width: `${Math.max(pct, 2)}%` }}
                     />
                   </div>
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {label} · {pct}%
                   </p>
                 </div>
@@ -261,8 +261,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         {/* Token status panel */}
         <div className="surface p-6">
           <div className="flex items-center gap-2 mb-6">
-            <KeyRound className="w-5 h-5 text-purple-500" />
-            <h2 className="text-lg font-display font-bold text-slate-700">Статус ЭЦП</h2>
+            <KeyRound className="w-5 h-5 text-purple-400" />
+            <h2 className="text-lg font-display font-bold text-slate-200">Статус ЭЦП</h2>
           </div>
 
           <div className="space-y-4">
@@ -274,15 +274,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className={clsx("w-2 h-2 rounded-full", colorClass)} />
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                         {label}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-slate-800">
+                    <span className="text-sm font-bold text-slate-100">
                       {count}
                     </span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className={clsx("h-full rounded-full transition-all duration-700", colorClass)}
                       style={{ width: `${Math.max(pct, 2)}%` }}
@@ -295,9 +295,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
           {/* Expiring alert */}
           {(tokenStats?.expiringSoon ?? 0) > 0 && (
-            <div className="mt-6 p-3 rounded-lg bg-amber-50 border border-amber-200 flex items-center gap-2">
+            <div className="mt-6 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
               <Clock className="w-4 h-4 text-amber-500 shrink-0" />
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-700">
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-500">
                 {tokenStats!.expiringSoon} истекает в 30 дней
               </span>
             </div>
@@ -309,14 +309,14 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       <div className="surface p-6 mb-6">
         <div className="flex items-center gap-2 mb-6">
           <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-          <h2 className="text-lg font-display font-bold text-slate-700">Статусы оборудования</h2>
+          <h2 className="text-lg font-display font-bold text-slate-200">Статусы оборудования</h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {statusItems.map(({ key, label, colorClass, textClass }) => {
             const count = equipStats?.byStatus?.[key] ?? 0;
             return (
-              <div key={key} className={clsx("p-4 rounded-xl text-center border border-slate-100", colorClass)}>
+              <div key={key} className={clsx("p-4 rounded-xl text-center border border-slate-700/50", colorClass)}>
                 <p className={clsx("text-3xl font-display font-bold mb-1", textClass)}>
                   {count}
                 </p>
@@ -330,20 +330,20 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       {/* ── System status footer ── */}
-      <div className="px-5 py-4 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+      <div className="px-5 py-4 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Система активна · On-Premise · Защищено
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <Shield className="w-4 h-4 text-slate-400" />
-          <Zap className="w-4 h-4 text-slate-400" />
-          <TrendingUp className="w-4 h-4 text-slate-400" />
+          <Shield className="w-4 h-4 text-slate-500" />
+          <Zap className="w-4 h-4 text-slate-500" />
+          <TrendingUp className="w-4 h-4 text-slate-500" />
         </div>
       </div>
     </div>

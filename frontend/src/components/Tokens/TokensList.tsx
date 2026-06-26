@@ -84,15 +84,15 @@ function TokenForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="form-label">Серийный номер Рутокена *</label>
-        <input className={clsx("input-field font-mono", errors.serialNumber && "border-red-500 bg-red-50")}
+        <input className={clsx("input-field font-mono", errors.serialNumber && "border-red-500 bg-red-500/10")}
           value={form.serialNumber} onChange={(e) => set('serialNumber', e.target.value)}
           placeholder="RT-000001234" disabled={isEdit} />
         {errors.serialNumber && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.serialNumber}</p>}
-        {isEdit && <p className="text-xs text-slate-500 font-medium mt-1.5">Серийный номер нельзя изменить</p>}
+        {isEdit && <p className="text-xs text-slate-400 font-medium mt-1.5">Серийный номер нельзя изменить</p>}
       </div>
       <div>
         <label className="form-label">ФИО сотрудника *</label>
-        <input className={clsx("input-field", errors.issuedTo && "border-red-500 bg-red-50")}
+        <input className={clsx("input-field", errors.issuedTo && "border-red-500 bg-red-500/10")}
           value={form.issuedTo} onChange={(e) => set('issuedTo', e.target.value)}
           placeholder="Иванов Иван Иванович" />
         {errors.issuedTo && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.issuedTo}</p>}
@@ -100,7 +100,7 @@ function TokenForm({
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="form-label">Тип сертификата *</label>
-          <input className={clsx("input-field", errors.certificateType && "border-red-500 bg-red-50")}
+          <input className={clsx("input-field", errors.certificateType && "border-red-500 bg-red-500/10")}
             value={form.certificateType} onChange={(e) => set('certificateType', e.target.value)}
             placeholder="ФНС, Казначейство, ЕГАИС..." />
           {errors.certificateType && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.certificateType}</p>}
@@ -118,7 +118,7 @@ function TokenForm({
       </div>
       <div>
         <label className="form-label">Дата истечения сертификата *</label>
-        <input type="date" className={clsx("input-field", errors.expirationDate && "border-red-500 bg-red-50")}
+        <input type="date" className={clsx("input-field", errors.expirationDate && "border-red-500 bg-red-500/10")}
           value={form.expirationDate} onChange={(e) => set('expirationDate', e.target.value)} />
         {errors.expirationDate && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.expirationDate}</p>}
       </div>
@@ -128,7 +128,7 @@ function TokenForm({
           value={form.notes ?? ''} onChange={(e) => set('notes', e.target.value)}
           placeholder="PIN, место хранения, доп. информация..." />
       </div>
-      <div className="flex gap-3 pt-4 border-t border-slate-100">
+      <div className="flex gap-3 pt-4 border-t border-slate-700/50">
         <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           {submitting ? 'Сохраняем...' : isEdit ? 'Сохранить' : 'Зарегистрировать'}
         </button>
@@ -185,14 +185,14 @@ function TokenDetail({
         <TokenStatusBadge status={item.status} />
         <ExpiryBadge daysUntilExpiry={item.daysUntilExpiry} isExpired={item.isExpired} />
         {docs.length > 0 && (
-          <span className="badge border bg-sky-50 text-sky-700 border-sky-200">
+          <span className="badge border bg-sky-500/10 text-sky-400 border-sky-500/20">
             <FileText className="w-3 h-3" /> {docs.length} докум.
           </span>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200">
+      <div className="flex gap-2 border-b border-slate-700">
         {([
           { key: 'info',    icon: <Info className="w-4 h-4" />,     label: 'Инфо' },
           { key: 'docs',    icon: <FileText className="w-4 h-4" />, label: `Доки${docs.length ? ` (${docs.length})` : ''}` },
@@ -204,8 +204,8 @@ function TokenDetail({
             className={clsx(
               "flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2",
               tab === key
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600"
             )}
           >
             {icon} {label}
@@ -219,9 +219,9 @@ function TokenDetail({
           <dl className="space-y-3 mb-4">
             {rows.map(([label, value]) =>
               value ? (
-                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-100">
-                  <dt className="text-sm text-slate-500 font-medium shrink-0">{label}</dt>
-                  <dd className="text-sm text-slate-800 font-bold text-right break-words">{value}</dd>
+                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-700/50">
+                  <dt className="text-sm text-slate-400 font-medium shrink-0">{label}</dt>
+                  <dd className="text-sm text-slate-100 font-bold text-right break-words">{value}</dd>
                 </div>
               ) : null
             )}
@@ -254,7 +254,7 @@ function TokenDetail({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3 pt-4 border-t border-slate-200">
+      <div className="flex gap-3 pt-4 border-t border-slate-700">
         <button className="btn-primary flex-1 justify-center" onClick={onEdit}>
           <Pencil className="w-4 h-4" /> Редактировать
         </button>
@@ -369,17 +369,17 @@ export function TokensList() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
+            <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg">
               <KeyRound className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-display font-bold text-slate-800">
+            <h1 className="text-2xl font-display font-bold text-slate-100">
               Рутокены и ЭЦП
             </h1>
           </div>
-          <p className="text-sm font-medium text-slate-500 ml-12">
+          <p className="text-sm font-medium text-slate-400 ml-12">
             Контроль электронных подписей
           </p>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 ml-12">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mt-2 ml-12">
             {total} записей
           </p>
         </div>
@@ -394,7 +394,7 @@ export function TokensList() {
             onChange={handleImportExcel}
           />
           <button
-            className={clsx('btn-ghost bg-white shadow-sm border border-slate-200', importing && 'opacity-60 cursor-not-allowed')}
+            className={clsx('btn-ghost bg-slate-800 shadow-sm border border-slate-700', importing && 'opacity-60 cursor-not-allowed')}
             onClick={() => importInputRef.current?.click()}
             disabled={importing}
             title="Импортировать токены из Excel (.xlsx)"
@@ -422,16 +422,16 @@ export function TokensList() {
           </select>
           <button
             className={clsx(
-              'btn-ghost whitespace-nowrap bg-white border border-slate-200 shadow-sm transition-colors',
-              expiringSoon && 'bg-amber-50 text-amber-600 border-amber-200 shadow-none'
+              'btn-ghost whitespace-nowrap bg-slate-800 border border-slate-700 shadow-sm transition-colors',
+              expiringSoon && 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-none'
             )}
             onClick={() => { setExpiringSoon((v) => !v); setPage(1); }}
           >
             <Clock className="w-4 h-4" />
             Скоро истекает
           </button>
-          <button className="btn-ghost px-3 bg-white border border-slate-200 shadow-sm" onClick={fetchData}>
-            <RefreshCw className={clsx('w-4 h-4 text-slate-500', loading && 'animate-spin')} />
+          <button className="btn-ghost px-3 bg-slate-800 border border-slate-700 shadow-sm" onClick={fetchData}>
+            <RefreshCw className={clsx('w-4 h-4 text-slate-400', loading && 'animate-spin')} />
           </button>
         </div>
       </div>
@@ -441,16 +441,16 @@ export function TokensList() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-slate-800/50 border-b border-slate-700">
                 {['Серийный №', 'ФИО сотрудника', 'Тип сертификата', 'Истекает', 'Осталось', 'Статус', 'Действия'].map(
-                  (h) => <th key={h} className="px-4 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{h}</th>
+                  (h) => <th key={h} className="px-4 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">{h}</th>
                 )}
               </tr>
             </thead>
             <tbody>
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => (
-                    <tr key={i} className="border-b border-slate-100">
+                    <tr key={i} className="border-b border-slate-700/50">
                       {Array.from({ length: 7 }).map((_, j) => (
                         <td key={j} className="px-4 py-4"><div className="skeleton h-4 rounded w-3/4" /></td>
                       ))}
@@ -460,23 +460,23 @@ export function TokensList() {
                 ? (
                     <tr>
                       <td colSpan={7} className="text-center py-16 text-slate-500">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                          <KeyRound className="w-8 h-8 text-slate-300" />
+                        <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto mb-4">
+                          <KeyRound className="w-8 h-8 text-slate-600" />
                         </div>
-                        <p className="font-bold text-slate-700">Рутокены не найдены</p>
+                        <p className="font-bold text-slate-300">Рутокены не найдены</p>
                       </td>
                     </tr>
                   )
                 : items.map((item) => (
-                    <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors" onClick={() => setDetailItem(item)}>
-                      <td className="px-4 py-4 font-mono font-medium text-xs text-blue-600">{item.serialNumber}</td>
-                      <td className="px-4 py-4 font-bold text-slate-800">{item.issuedTo}</td>
+                    <tr key={item.id} className="border-b border-slate-700/50 hover:bg-slate-800 cursor-pointer transition-colors" onClick={() => setDetailItem(item)}>
+                      <td className="px-4 py-4 font-mono font-medium text-xs text-blue-400">{item.serialNumber}</td>
+                      <td className="px-4 py-4 font-bold text-slate-100">{item.issuedTo}</td>
                       <td className="px-4 py-4">
                         <Badge variant="purple">
                           <Shield className="w-3 h-3" /> {item.certificateType}
                         </Badge>
                       </td>
-                      <td className="px-4 py-4 text-slate-500 font-medium text-sm whitespace-nowrap">
+                      <td className="px-4 py-4 text-slate-400 font-medium text-sm whitespace-nowrap">
                         {new Date(item.expirationDate).toLocaleDateString('ru-RU')}
                       </td>
                       <td className="px-4 py-4">
@@ -485,11 +485,11 @@ export function TokensList() {
                       <td className="px-4 py-4"><TokenStatusBadge status={item.status} /></td>
                       <td className="px-4 py-4">
                         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                          <button className="btn-ghost py-1 px-2 text-slate-500 hover:text-blue-600" onClick={() => setEditItem(item)}>
+                          <button className="btn-ghost py-1 px-2 text-slate-400 hover:text-blue-400 border-none bg-transparent" onClick={() => setEditItem(item)}>
                             <Pencil className="w-4 h-4" />
                           </button>
                           {item.status === 'active' && (
-                            <button className="text-xs font-bold uppercase tracking-wider text-red-500 hover:bg-red-50 px-2 py-1 rounded-md transition-colors"
+                            <button className="text-xs font-bold uppercase tracking-wider text-red-400 hover:bg-red-500/10 px-2 py-1 rounded-md transition-colors"
                               onClick={() => setRevokeConfirm(item)}>
                               Отозвать
                             </button>
@@ -502,11 +502,11 @@ export function TokensList() {
           </table>
         </div>
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-t border-slate-200">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Страница {page} из {totalPages} · {total} записей</p>
+          <div className="flex items-center justify-between px-6 py-4 bg-slate-800 border-t border-slate-700">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Страница {page} из {totalPages} · {total} записей</p>
             <div className="flex gap-2">
-              <button className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
-              <button className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
+              <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
+              <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
             </div>
           </div>
         )}
@@ -523,13 +523,13 @@ export function TokensList() {
             ))
           : items.map((item) => (
               <button key={item.id} onClick={() => setDetailItem(item)}
-                className="w-full text-left p-4 rounded-xl bg-white border border-slate-200 shadow-sm transition-all active:scale-[0.99] hover:shadow-md cursor-pointer">
+                className="w-full text-left p-4 rounded-xl bg-slate-800 border border-slate-700 shadow-sm transition-all active:scale-[0.99] hover:shadow-md cursor-pointer">
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <p className="font-display font-bold text-slate-800 text-base">{item.issuedTo}</p>
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">{item.serialNumber}</p>
+                    <p className="font-display font-bold text-slate-100 text-base">{item.issuedTo}</p>
+                    <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mt-1">{item.serialNumber}</p>
                   </div>
-                  <div className="p-1 rounded-full bg-slate-50 text-slate-400">
+                  <div className="p-1 rounded-full bg-slate-700 text-slate-400">
                     <ChevronRight className="w-5 h-5 shrink-0" />
                   </div>
                 </div>
@@ -580,18 +580,18 @@ export function TokensList() {
       <Modal open={!!revokeConfirm} onClose={() => setRevokeConfirm(null)} title="Отозвать токен" size="sm">
         {revokeConfirm && (
           <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-400">
               <AlertTriangle className="w-6 h-6 mb-2 text-amber-500" />
-              <p>Отозвать сертификат <strong>{revokeConfirm.certificateType}</strong>?</p>
-              <p className="text-xs mt-1">Владелец: <span className="font-bold">{revokeConfirm.issuedTo}</span></p>
-              <p className="text-xs">SN: <span className="font-mono">{revokeConfirm.serialNumber}</span></p>
-              <p className="text-xs mt-2 font-bold text-amber-700">Это действие необратимо.</p>
+              <p>Отозвать сертификат <strong className="text-amber-200">{revokeConfirm.certificateType}</strong>?</p>
+              <p className="text-xs mt-1">Владелец: <span className="font-bold text-amber-200">{revokeConfirm.issuedTo}</span></p>
+              <p className="text-xs">SN: <span className="font-mono text-amber-200">{revokeConfirm.serialNumber}</span></p>
+              <p className="text-xs mt-2 font-bold text-amber-500">Это действие необратимо.</p>
             </div>
             <div className="flex gap-3">
               <button className="btn-danger flex-1 justify-center py-2.5 rounded-xl font-bold text-sm" onClick={handleRevoke} disabled={revoking}>
                 {revoking ? 'Отзываем...' : 'Отозвать'}
               </button>
-              <button className="btn-ghost bg-slate-100 py-2.5 px-4 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-200" onClick={() => setRevokeConfirm(null)}>Отмена</button>
+              <button className="btn-ghost bg-slate-800 py-2.5 px-4 rounded-xl font-bold text-sm text-slate-400 hover:bg-slate-700" onClick={() => setRevokeConfirm(null)}>Отмена</button>
             </div>
           </div>
         )}

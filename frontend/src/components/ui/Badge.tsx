@@ -1,20 +1,20 @@
 import clsx from 'clsx';
 
 // ============================================================
-// Status badges — Soft UI pills for statuses
+// Status badges — Dark Soft UI pills for statuses
 // ============================================================
 
 type Variant = 'green' | 'blue' | 'amber' | 'red' | 'slate' | 'cyan' | 'purple';
 
-// Soft UI badge colors
+// Dark Soft UI badge colors
 const variantStyles: Record<Variant, string> = {
-  green:  'bg-emerald-50 text-emerald-700 border-emerald-200',
-  blue:   'bg-blue-50 text-blue-700 border-blue-200',
-  amber:  'bg-amber-50 text-amber-700 border-amber-200',
-  red:    'bg-red-50 text-red-700 border-red-200',
-  slate:  'bg-slate-100 text-slate-700 border-slate-200',
-  cyan:   'bg-sky-50 text-sky-700 border-sky-200',
-  purple: 'bg-purple-50 text-purple-700 border-purple-200',
+  green:  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  blue:   'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  amber:  'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  red:    'bg-red-500/10 text-red-400 border-red-500/20',
+  slate:  'bg-slate-500/10 text-slate-400 border-slate-500/20',
+  cyan:   'bg-sky-500/10 text-sky-400 border-sky-500/20',
+  purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
 };
 
 // Equipment status mapping

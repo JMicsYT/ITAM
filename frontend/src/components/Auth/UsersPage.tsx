@@ -11,9 +11,9 @@ import { useToast } from '../ui/Toast';
 type Role = 'admin' | 'technician' | 'viewer';
 
 const ROLE_CONFIG: Record<Role, { label: string; bg: string; text: string; icon: React.ReactNode }> = {
-  admin:      { label: 'Администратор', bg: 'bg-rose-50',  text: 'text-rose-700',   icon: <Shield className="w-3.5 h-3.5" /> },
-  technician: { label: 'Техник',        bg: 'bg-cyan-50',  text: 'text-cyan-700',   icon: <Key className="w-3.5 h-3.5" /> },
-  viewer:     { label: 'Наблюдатель',   bg: 'bg-slate-100', text: 'text-slate-700',  icon: <Users className="w-3.5 h-3.5" /> },
+  admin:      { label: 'Администратор', bg: 'bg-rose-500/10',  text: 'text-rose-400',   icon: <Shield className="w-3.5 h-3.5" /> },
+  technician: { label: 'Техник',        bg: 'bg-cyan-500/10',  text: 'text-cyan-400',   icon: <Key className="w-3.5 h-3.5" /> },
+  viewer:     { label: 'Наблюдатель',   bg: 'bg-slate-800',    text: 'text-slate-400',  icon: <Users className="w-3.5 h-3.5" /> },
 };
 
 function RoleBadge({ role }: { role: Role }) {
@@ -81,7 +81,7 @@ function CreateUserModal({
       <label className="form-label">{label}</label>
       <input
         type={type}
-        className={clsx('input-field', errors[name] && 'border-red-500 bg-red-50')}
+        className={clsx('input-field', errors[name] && 'border-red-500 bg-red-500/10')}
         placeholder={placeholder}
         value={form[name] as string}
         onChange={(e) => setForm((f) => ({ ...f, [name]: e.target.value }))}
@@ -108,7 +108,7 @@ function CreateUserModal({
           <option value="viewer">Наблюдатель</option>
         </select>
       </div>
-      <div className="flex gap-3 pt-4 border-t border-slate-100">
+      <div className="flex gap-3 pt-4 border-t border-slate-700/50">
         <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           <UserPlus className="w-4 h-4" />
           {submitting ? 'Создание...' : 'Создать'}
@@ -150,8 +150,8 @@ function ChangePasswordModal({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-sm font-medium text-slate-500 mb-4">
-        Изменение пароля для <strong className="text-slate-800">{user.fullName}</strong>
+      <p className="text-sm font-medium text-slate-400 mb-4">
+        Изменение пароля для <strong className="text-slate-100">{user.fullName}</strong>
       </p>
       <div>
         <label className="form-label">Новый пароль</label>
@@ -163,7 +163,7 @@ function ChangePasswordModal({
         <input type="password" className="input-field" value={confirm}
           onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" />
       </div>
-      <div className="flex gap-3 pt-4 border-t border-slate-100">
+      <div className="flex gap-3 pt-4 border-t border-slate-700/50">
         <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           {submitting ? 'Сохранение...' : 'Сохранить пароль'}
         </button>
@@ -193,15 +193,15 @@ function UserRow({
   return (
     <div
       className={clsx(
-        'bg-white border border-slate-200 rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all hover:shadow-md active:scale-[0.99]',
-        !user.isActive && 'opacity-60 bg-slate-50 grayscale-[0.2]'
+        'bg-slate-800 border border-slate-700 rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all hover:shadow-md active:scale-[0.99]',
+        !user.isActive && 'opacity-60 bg-slate-800/50 grayscale-[0.2]'
       )}
     >
       {/* Avatar */}
       <div
         className={clsx(
           'w-12 h-12 rounded-full flex items-center justify-center text-lg font-display font-bold shrink-0',
-          user.isActive ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-500'
+          user.isActive ? 'bg-blue-500/10 text-blue-400' : 'bg-slate-800 text-slate-500'
         )}
       >
         {user.fullName.charAt(0).toUpperCase()}
@@ -210,22 +210,22 @@ function UserRow({
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          <p className="font-display font-bold text-slate-800 text-base">{user.fullName}</p>
+          <p className="font-display font-bold text-slate-100 text-base">{user.fullName}</p>
           {isSelf && (
-            <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 font-bold rounded-full bg-green-100 text-green-700">
+            <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 font-bold rounded-full bg-green-500/10 text-green-400">
               Вы
             </span>
           )}
         </div>
-        <p className="text-xs font-medium text-slate-500 mb-2">@{user.username}</p>
+        <p className="text-xs font-medium text-slate-400 mb-2">@{user.username}</p>
         <div className="flex items-center gap-2 flex-wrap">
           <RoleBadge role={user.role} />
           {user.isActive ? (
-            <span className="badge border font-medium border-green-200 text-green-700 flex items-center gap-1.5 bg-green-50">
+            <span className="badge border font-medium border-green-500/20 text-green-400 flex items-center gap-1.5 bg-green-500/10">
               <CheckCircle2 className="w-3.5 h-3.5" /> Активен
             </span>
           ) : (
-            <span className="badge border font-medium border-red-200 text-red-700 flex items-center gap-1.5 bg-red-50">
+            <span className="badge border font-medium border-red-500/20 text-red-400 flex items-center gap-1.5 bg-red-500/10">
               <XCircle className="w-3.5 h-3.5" /> Заблокирован
             </span>
           )}
@@ -237,7 +237,7 @@ function UserRow({
         <div className="flex gap-2 shrink-0 sm:self-center mt-3 sm:mt-0">
           <button
             onClick={onChangePassword}
-            className="p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition-colors"
+            className="p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-blue-400 transition-colors"
             title="Сменить пароль"
           >
             <Key className="w-4 h-4" />
@@ -247,8 +247,8 @@ function UserRow({
             className={clsx(
               'px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center gap-2 transition-colors',
               user.isActive
-                ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100'
-                : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-100'
+                ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20'
+                : 'bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/20'
             )}
             title={user.isActive ? 'Заблокировать' : 'Активировать'}
           >
@@ -301,20 +301,20 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-cyan-100 text-cyan-600 rounded-lg">
+            <div className="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg">
               <Users className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-display font-bold text-slate-800">
+            <h1 className="text-2xl font-display font-bold text-slate-100">
               Сотрудники
             </h1>
           </div>
-          <p className="text-sm font-medium text-slate-500 ml-12">
+          <p className="text-sm font-medium text-slate-400 ml-12">
             Управление персоналом
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <button onClick={fetchUsers} className="btn-ghost bg-white border border-slate-200 shadow-sm py-2 px-3" title="Обновить">
-            <RefreshCw className={clsx('w-4 h-4 text-slate-500', loading && 'animate-spin')} />
+          <button onClick={fetchUsers} className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-2 px-3" title="Обновить">
+            <RefreshCw className={clsx('w-4 h-4 text-slate-400', loading && 'animate-spin')} />
           </button>
           <button onClick={() => setCreateOpen(true)} className="btn-primary">
             <UserPlus className="w-4 h-4" /> Создать
@@ -338,10 +338,10 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
           ))
         ) : users.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-slate-300" />
+            <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-slate-600" />
             </div>
-            <p className="font-bold text-slate-700">Пользователи не найдены</p>
+            <p className="font-bold text-slate-300">Пользователи не найдены</p>
           </div>
         ) : (
           users.map((u) => (

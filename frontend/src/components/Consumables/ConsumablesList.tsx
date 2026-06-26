@@ -134,7 +134,7 @@ function ConsumableForm({
 
       <div>
         <label className="form-label">Артикул / Модель *</label>
-        <input className={clsx('input-field', errors.model && 'border-red-500 bg-red-50')}
+        <input className={clsx('input-field', errors.model && 'border-red-500 bg-red-500/10')}
           value={form.model} onChange={(e) => set('model', e.target.value)}
           placeholder="Kyocera TK-1170, HP CE285A..." />
         {errors.model && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.model}</p>}
@@ -142,7 +142,7 @@ function ConsumableForm({
 
       <div>
         <label className="form-label">Серийный номер *</label>
-        <input className={clsx('input-field', errors.serialNumber && 'border-red-500 bg-red-50')}
+        <input className={clsx('input-field', errors.serialNumber && 'border-red-500 bg-red-500/10')}
           value={form.serialNumber} onChange={(e) => set('serialNumber', e.target.value)}
           placeholder="SN-0001, ABC123456..." />
         {errors.serialNumber && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.serialNumber}</p>}
@@ -150,18 +150,18 @@ function ConsumableForm({
 
       <div>
         <label className="form-label">Совместимые принтеры *</label>
-        <input className={clsx('input-field', errors.compatibleWith && 'border-red-500 bg-red-50')}
+        <input className={clsx('input-field', errors.compatibleWith && 'border-red-500 bg-red-500/10')}
           value={compatStr}
           onChange={(e) => set('compatibleWith', e.target.value.split(','))}
           placeholder="Kyocera ECOSYS M2135dn, Kyocera ECOSYS P2235d" />
-        <p className="text-xs font-medium text-slate-500 mt-1.5">Перечислите через запятую</p>
+        <p className="text-xs font-medium text-slate-400 mt-1.5">Перечислите через запятую</p>
         {errors.compatibleWith && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.compatibleWith}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="form-label">Место хранения *</label>
-          <input className={clsx('input-field', errors.location && 'border-red-500 bg-red-50')}
+          <input className={clsx('input-field', errors.location && 'border-red-500 bg-red-500/10')}
             value={form.location} onChange={(e) => set('location', e.target.value)}
             placeholder="Склад А, Шкаф 1" />
           {errors.location && <p className="text-xs text-red-500 font-bold mt-1.5">{errors.location}</p>}
@@ -174,7 +174,7 @@ function ConsumableForm({
         </div>
       </div>
 
-      <div className="flex gap-3 pt-4 border-t border-slate-100">
+      <div className="flex gap-3 pt-4 border-t border-slate-700/50">
         <button type="submit" className="btn-primary flex-1 justify-center" disabled={submitting}>
           {submitting ? 'Сохраняем...' : isEdit ? 'Сохранить' : 'Добавить'}
         </button>
@@ -217,14 +217,14 @@ function ConsumableDetail({
         <ConsumableTypeBadge type={item.type} />
         <ConsumableStatusBadge status={item.status} />
         {docs.length > 0 && (
-          <span className="badge border bg-sky-50 text-sky-700 border-sky-200">
+          <span className="badge border bg-sky-500/10 text-sky-400 border-sky-500/20">
             <FileText className="w-3 h-3" /> {docs.length} докум.
           </span>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200">
+      <div className="flex gap-2 border-b border-slate-700">
         {([
           { key: 'info',    icon: <Info className="w-4 h-4" />,     label: 'Инфо' },
           { key: 'docs',    icon: <FileText className="w-4 h-4" />, label: `Доки${docs.length ? ` (${docs.length})` : ''}` },
@@ -236,8 +236,8 @@ function ConsumableDetail({
             className={clsx(
               "flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2",
               tab === key
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600"
             )}
           >
             {icon} {label}
@@ -251,9 +251,9 @@ function ConsumableDetail({
           <dl className="space-y-3 mb-4">
             {rows.map(([label, value]) =>
               value !== null && value !== undefined ? (
-                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-100">
-                  <dt className="text-sm text-slate-500 font-medium shrink-0">{label}</dt>
-                  <dd className="text-sm text-slate-800 font-bold text-right break-words">{String(value)}</dd>
+                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-700/50">
+                  <dt className="text-sm text-slate-400 font-medium shrink-0">{label}</dt>
+                  <dd className="text-sm text-slate-100 font-bold text-right break-words">{String(value)}</dd>
                 </div>
               ) : null
             )}
@@ -286,7 +286,7 @@ function ConsumableDetail({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3 pt-4 border-t border-slate-200">
+      <div className="flex gap-3 pt-4 border-t border-slate-700">
         <button className="btn-primary flex-1 justify-center" onClick={onEdit}>
           <Pencil className="w-4 h-4" /> Редактировать
         </button>
@@ -396,17 +396,17 @@ export function ConsumablesList() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
+            <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg">
               <Package className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-display font-bold text-slate-800">
+            <h1 className="text-2xl font-display font-bold text-slate-100">
               Расходники
             </h1>
           </div>
-          <p className="text-sm font-medium text-slate-500 ml-12">
+          <p className="text-sm font-medium text-slate-400 ml-12">
             Управление расходными материалами
           </p>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 ml-12">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mt-2 ml-12">
             {total} экземпляров в базе
           </p>
         </div>
@@ -421,7 +421,7 @@ export function ConsumablesList() {
             onChange={handleImportExcel}
           />
           <button
-            className={clsx('btn-ghost bg-white shadow-sm border border-slate-200', importing && 'opacity-60 cursor-not-allowed')}
+            className={clsx('btn-ghost bg-slate-800 shadow-sm border border-slate-700', importing && 'opacity-60 cursor-not-allowed')}
             onClick={() => importInputRef.current?.click()}
             disabled={importing}
             title="Импортировать расходники из Excel (.xlsx)"
@@ -451,8 +451,8 @@ export function ConsumablesList() {
             onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
             {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <button className="btn-ghost px-3 bg-white border border-slate-200 shadow-sm" onClick={fetchData} title="Обновить">
-            <RefreshCw className={clsx('w-4 h-4 text-slate-500', loading && 'animate-spin')} />
+          <button className="btn-ghost px-3 bg-slate-800 border border-slate-700 shadow-sm" onClick={fetchData} title="Обновить">
+            <RefreshCw className={clsx('w-4 h-4 text-slate-400', loading && 'animate-spin')} />
           </button>
         </div>
       </div>
@@ -462,16 +462,16 @@ export function ConsumablesList() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-slate-800/50 border-b border-slate-700">
                 {['Тип', 'Артикул / Модель', 'Серийный номер', 'Статус', 'Место хранения', 'Действия'].map((h) => (
-                  <th key={h} className="px-4 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{h}</th>
+                  <th key={h} className="px-4 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => (
-                    <tr key={i} className="border-b border-slate-100">
+                    <tr key={i} className="border-b border-slate-700/50">
                       {Array.from({ length: 6 }).map((_, j) => (
                         <td key={j} className="px-4 py-4"><div className="skeleton h-4 rounded w-3/4" /></td>
                       ))}
@@ -481,28 +481,28 @@ export function ConsumablesList() {
                 ? (
                     <tr>
                       <td colSpan={6} className="text-center py-16 text-slate-500">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                          <Package className="w-8 h-8 text-slate-300" />
+                        <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto mb-4 border border-slate-700">
+                          <Package className="w-8 h-8 text-slate-600" />
                         </div>
-                        <p className="font-bold text-slate-700">Расходники не найдены</p>
+                        <p className="font-bold text-slate-300">Расходники не найдены</p>
                       </td>
                     </tr>
                   )
                 : items.map((item) => (
-                    <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors" onClick={() => setDetailItem(item)}>
+                    <tr key={item.id} className="border-b border-slate-700/50 hover:bg-slate-800 cursor-pointer transition-colors" onClick={() => setDetailItem(item)}>
                       <td className="px-4 py-4"><ConsumableTypeBadge type={item.type} /></td>
-                      <td className="px-4 py-4 font-bold text-slate-800">{item.model}</td>
+                      <td className="px-4 py-4 font-bold text-slate-200">{item.model}</td>
                       <td className="px-4 py-4">
-                        <span className="flex items-center gap-2 font-mono font-medium text-xs text-slate-500">
-                          <Tag className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="flex items-center gap-2 font-mono font-medium text-xs text-slate-400">
+                          <Tag className="w-3.5 h-3.5 text-slate-500" />
                           {item.serialNumber}
                         </span>
                       </td>
                       <td className="px-4 py-4"><ConsumableStatusBadge status={item.status} /></td>
-                      <td className="px-4 py-4 text-slate-600 font-medium">{item.location}</td>
+                      <td className="px-4 py-4 text-slate-300 font-medium">{item.location}</td>
                       <td className="px-4 py-4">
                         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                          <button className="btn-ghost py-1 px-2 text-slate-500 hover:text-blue-600"
+                          <button className="btn-ghost py-1 px-2 text-slate-400 hover:text-blue-400 border-none bg-transparent"
                             onClick={() => setEditItem(item)}>
                             <Pencil className="w-4 h-4" />
                           </button>
@@ -514,16 +514,16 @@ export function ConsumablesList() {
           </table>
         </div>
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-t border-slate-200">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Страница {page} из {totalPages}</p>
+          <div className="flex items-center justify-between px-6 py-4 bg-slate-800 border-t border-slate-700">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Страница {page} из {totalPages}</p>
             <div className="flex gap-2">
-              <button className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
-              <button className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
+              <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
+              <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
             </div>
           </div>
         )}
       </div>
-
+      
       {/* Mobile cards */}
       <div className="md:hidden space-y-3">
         {loading
@@ -534,20 +534,20 @@ export function ConsumablesList() {
               </div>
             ))
           : items.map((item) => (
-              <div key={item.id} className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm transition-all active:scale-[0.99] hover:shadow-md cursor-pointer" onClick={() => setDetailItem(item)}>
+              <div key={item.id} className="p-4 rounded-xl bg-slate-800 border border-slate-700 shadow-sm transition-all active:scale-[0.99] hover:shadow-md cursor-pointer" onClick={() => setDetailItem(item)}>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-2">
                       <ConsumableTypeBadge type={item.type} />
                       <ConsumableStatusBadge status={item.status} />
                     </div>
-                    <p className="font-display font-bold text-slate-800 text-base mt-2">{item.model}</p>
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1 flex items-center gap-1.5">
-                      <Tag className="w-3.5 h-3.5 text-slate-400" />SN: {item.serialNumber}
+                    <p className="font-display font-bold text-slate-100 text-base mt-2">{item.model}</p>
+                    <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mt-1 flex items-center gap-1.5">
+                      <Tag className="w-3.5 h-3.5 text-slate-500" />SN: {item.serialNumber}
                     </p>
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">ЛОК: {item.location}</p>
+                    <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mt-1">ЛОК: {item.location}</p>
                   </div>
-                  <button className="btn-ghost py-1 px-2 shrink-0 text-slate-400 hover:text-blue-600"
+                  <button className="btn-ghost py-1 px-2 shrink-0 text-slate-400 hover:text-blue-400 border-none"
                     onClick={(e) => { e.stopPropagation(); setEditItem(item); }}>
                     <Pencil className="w-4 h-4" />
                   </button>

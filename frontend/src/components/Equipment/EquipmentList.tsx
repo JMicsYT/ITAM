@@ -35,7 +35,7 @@ const STATUS_OPTIONS: { value: string; label: string }[] = [
 
 function SkeletonRow() {
   return (
-    <tr className="border-b border-slate-100">
+    <tr className="border-b border-slate-700/50">
       {Array.from({ length: 7 }).map((_, i) => (
         <td key={i} className="px-4 py-4">
           <div className="skeleton h-4 rounded" style={{ width: `${60 + Math.random() * 40}%` }} />
@@ -79,14 +79,14 @@ function EquipmentDetail({
         <EquipmentTypeBadge type={item.type} />
         <EquipmentStatusBadge status={item.status} />
         {docs.length > 0 && (
-          <span className="badge border bg-sky-50 text-sky-700 border-sky-200">
+          <span className="badge border bg-sky-500/10 text-sky-400 border-sky-500/20">
             <FileText className="w-3 h-3" /> {docs.length} докум.
           </span>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200">
+      <div className="flex gap-2 border-b border-slate-700">
         {([
           { key: 'info',    icon: <Info className="w-4 h-4" />,     label: 'Инфо' },
           { key: 'docs',    icon: <FileText className="w-4 h-4" />, label: `Доки${docs.length ? ` (${docs.length})` : ''}` },
@@ -98,8 +98,8 @@ function EquipmentDetail({
             className={clsx(
               "flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2",
               tab === key
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600"
             )}
           >
             {icon} {label}
@@ -113,9 +113,9 @@ function EquipmentDetail({
           <dl className="space-y-3 mb-5">
             {rows.map(([label, value]) =>
               value ? (
-                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-100">
-                  <dt className="text-sm text-slate-500 font-medium shrink-0">{label}</dt>
-                  <dd className="text-sm text-slate-800 font-bold text-right break-words">{value}</dd>
+                <div key={label} className="flex justify-between gap-4 py-2 border-b border-slate-700/50">
+                  <dt className="text-sm text-slate-400 font-medium shrink-0">{label}</dt>
+                  <dd className="text-sm text-slate-100 font-bold text-right break-words">{value}</dd>
                 </div>
               ) : null
             )}
@@ -123,14 +123,14 @@ function EquipmentDetail({
 
           {item.specs && Object.keys(item.specs).length > 0 && (
             <div>
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
                 Характеристики
               </h4>
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="p-4 rounded-xl bg-slate-800 border border-slate-700 space-y-3">
                 {Object.entries(item.specs).map(([k, v]) => (
                   <div key={k} className="flex justify-between text-sm">
-                    <span className="text-slate-500 font-medium capitalize">{k}</span>
-                    <span className="text-slate-800 font-bold">{String(v)}</span>
+                    <span className="text-slate-400 font-medium capitalize">{k}</span>
+                    <span className="text-slate-100 font-bold">{String(v)}</span>
                   </div>
                 ))}
               </div>
@@ -164,7 +164,7 @@ function EquipmentDetail({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3 pt-4 border-t border-slate-200">
+      <div className="flex gap-3 pt-4 border-t border-slate-700">
         <button className="btn-primary flex-1 justify-center" onClick={onEdit}>
           <Pencil className="w-4 h-4" /> Редактировать
         </button>
@@ -183,14 +183,14 @@ function EquipmentCard({ item, onClick }: { item: Equipment; onClick: () => void
   return (
     <button
       onClick={onClick}
-      className="w-full text-left p-4 rounded-xl bg-white border border-slate-200 shadow-sm transition-all active:scale-[0.99] hover:shadow-md"
+      className="w-full text-left p-4 rounded-xl bg-slate-800 border border-slate-700 shadow-sm transition-all active:scale-[0.99] hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         <div>
-          <p className="font-display font-bold text-slate-800 text-base">{item.brand} {item.model}</p>
-          <p className="text-xs font-medium mt-0.5 text-slate-500 uppercase tracking-wider">SN: {item.serialNumber}</p>
+          <p className="font-display font-bold text-slate-100 text-base">{item.brand} {item.model}</p>
+          <p className="text-xs font-medium mt-0.5 text-slate-400 uppercase tracking-wider">SN: {item.serialNumber}</p>
         </div>
-        <div className="p-1 rounded-full bg-slate-50 text-slate-400">
+        <div className="p-1 rounded-full bg-slate-700 text-slate-400">
           <ChevronRight className="w-5 h-5 shrink-0" />
         </div>
       </div>
@@ -318,17 +318,17 @@ export function EquipmentList() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
               <Server className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-display font-bold text-slate-800">
+            <h1 className="text-2xl font-display font-bold text-slate-100">
               Оборудование
             </h1>
           </div>
-          <p className="text-sm font-medium text-slate-500 ml-12">
+          <p className="text-sm font-medium text-slate-400 ml-12">
             Учёт ИТ-активов предприятия
           </p>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 ml-12">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mt-2 ml-12">
             {total > 0 ? `${total} единиц в базе` : 'Нет данных'}
           </p>
         </div>
@@ -345,7 +345,7 @@ export function EquipmentList() {
             onChange={handleImportExcel}
           />
           <button
-            className={clsx('btn-ghost bg-white shadow-sm border border-slate-200', importing && 'opacity-60 cursor-not-allowed')}
+            className={clsx('btn-ghost bg-slate-800 shadow-sm border border-slate-700', importing && 'opacity-60 cursor-not-allowed')}
             onClick={() => importInputRef.current?.click()}
             disabled={importing}
             title="Импортировать оборудование из Excel (.xlsx)"
@@ -394,11 +394,11 @@ export function EquipmentList() {
               {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
             <button
-              className="btn-ghost px-3 bg-white border border-slate-200 shadow-sm"
+              className="btn-ghost px-3 bg-slate-800 border border-slate-700 shadow-sm"
               onClick={fetchData}
               title="Обновить"
             >
-              <RefreshCw className={clsx('w-4 h-4 text-slate-500', loading && 'animate-spin')} />
+              <RefreshCw className={clsx('w-4 h-4 text-slate-400', loading && 'animate-spin')} />
             </button>
           </div>
         </div>
@@ -409,10 +409,10 @@ export function EquipmentList() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-slate-800/50 border-b border-slate-700">
                 {['Тип', 'Производитель / Модель', 'Серийный №', 'Расположение', 'Ответственный', 'Статус', 'QR'].map(
                   (h) => (
-                    <th key={h} className="px-4 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <th key={h} className="px-4 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                       {h}
                     </th>
                   )
@@ -426,12 +426,12 @@ export function EquipmentList() {
                 ? (
                     <tr>
                       <td colSpan={7} className="text-center py-16 text-slate-500">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                          <Server className="w-8 h-8 text-slate-300" />
+                        <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto mb-4 border border-slate-700">
+                          <Server className="w-8 h-8 text-slate-600" />
                         </div>
-                        <p className="font-bold text-slate-700">Оборудование не найдено</p>
+                        <p className="font-bold text-slate-300">Оборудование не найдено</p>
                         {(search || typeFilter || statusFilter) && (
-                          <p className="text-sm mt-1">Попробуйте изменить фильтры</p>
+                          <p className="text-sm mt-1 text-slate-400">Попробуйте изменить фильтры</p>
                         )}
                       </td>
                     </tr>
@@ -439,18 +439,18 @@ export function EquipmentList() {
                 : items.map((item) => (
                     <tr
                       key={item.id}
-                      className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
+                      className="border-b border-slate-700/50 hover:bg-slate-800 cursor-pointer transition-colors"
                       onClick={() => setDetailItem(item)}
                     >
                       <td className="px-4 py-4">
                         <EquipmentTypeBadge type={item.type} />
                       </td>
                       <td className="px-4 py-4">
-                        <p className="font-bold text-slate-800">{item.brand} {item.model}</p>
+                        <p className="font-bold text-slate-200">{item.brand} {item.model}</p>
                       </td>
-                      <td className="px-4 py-4 font-mono font-medium text-slate-500 text-xs">{item.serialNumber}</td>
-                      <td className="px-4 py-4 text-slate-600 font-medium">{item.location}</td>
-                      <td className="px-4 py-4 text-slate-600 font-medium">{item.assignedTo ?? '—'}</td>
+                      <td className="px-4 py-4 font-mono font-medium text-slate-400 text-xs">{item.serialNumber}</td>
+                      <td className="px-4 py-4 text-slate-300 font-medium">{item.location}</td>
+                      <td className="px-4 py-4 text-slate-300 font-medium">{item.assignedTo ?? '—'}</td>
                       <td className="px-4 py-4">
                         <EquipmentStatusBadge status={item.status} />
                       </td>
@@ -467,18 +467,18 @@ export function EquipmentList() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 bg-slate-50 border-t border-slate-200">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          <div className="flex items-center justify-between px-6 py-4 bg-slate-800 border-t border-slate-700">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
               Страница {page} из {totalPages} · {total} записей
             </p>
             <div className="flex gap-2">
               <button
-                className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs"
+                className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => p - 1)}
               >← Назад</button>
               <button
-                className="btn-ghost bg-white border border-slate-200 shadow-sm py-1.5 px-3 text-xs"
+                className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm py-1.5 px-3 text-xs"
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => p + 1)}
               >Вперёд →</button>
@@ -503,10 +503,10 @@ export function EquipmentList() {
           : items.length === 0
           ? (
               <div className="text-center py-16 text-slate-500">
-                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <Server className="w-8 h-8 text-slate-300" />
+                <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto mb-4">
+                  <Server className="w-8 h-8 text-slate-600" />
                 </div>
-                <p className="font-bold text-slate-700">Ничего не найдено</p>
+                <p className="font-bold text-slate-300">Ничего не найдено</p>
               </div>
             )
           : items.map((item) => (
@@ -520,9 +520,9 @@ export function EquipmentList() {
         {/* Mobile pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-4 pt-4">
-            <button className="btn-ghost bg-white border border-slate-200 shadow-sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
-            <span className="flex items-center text-xs font-bold text-slate-500">{page} / {totalPages}</span>
-            <button className="btn-ghost bg-white border border-slate-200 shadow-sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
+            <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Назад</button>
+            <span className="flex items-center text-xs font-bold text-slate-400">{page} / {totalPages}</span>
+            <button className="btn-ghost bg-slate-800 border border-slate-700 shadow-sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
           </div>
         )}
       </div>
@@ -567,10 +567,10 @@ export function EquipmentList() {
       <Modal open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Подтверждение удаления" size="sm">
         {deleteConfirm && (
           <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">
               <AlertTriangle className="w-6 h-6 mb-2 text-red-500" />
               <p>Удалить <strong>{deleteConfirm.brand} {deleteConfirm.model}</strong> (SN: {deleteConfirm.serialNumber})?</p>
-              <p className="mt-2 text-xs font-medium text-red-600">Только оборудование со статусом «Списано» может быть удалено.</p>
+              <p className="mt-2 text-xs font-medium text-red-500">Только оборудование со статусом «Списано» может быть удалено.</p>
             </div>
             <div className="flex gap-3">
               <button
@@ -580,7 +580,7 @@ export function EquipmentList() {
               >
                 {deleting ? 'Удаляем...' : 'Удалить'}
               </button>
-              <button className="btn-ghost bg-slate-100" onClick={() => setDeleteConfirm(null)}>Отмена</button>
+              <button className="btn-ghost bg-slate-800" onClick={() => setDeleteConfirm(null)}>Отмена</button>
             </div>
           </div>
         )}
